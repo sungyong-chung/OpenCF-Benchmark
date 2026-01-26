@@ -9,7 +9,7 @@ SUBMISSIONS_DIR = 'submissions'
 OUTPUT_FILE = 'docs/leaderboard_data.json'
 BENCHMARK_DIR = 'benchmark_data'
 GT_FILENAME = 'test_ground_truth.csv'
-ZIP_FILENAME = 'ground_truth.zip'
+ZIP_FILENAME = 'test_ground_truth.zip'
 
 GT_PATH = os.path.join(BENCHMARK_DIR, GT_FILENAME)
 ZIP_PATH = os.path.join(BENCHMARK_DIR, ZIP_FILENAME)
