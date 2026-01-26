@@ -89,6 +89,14 @@ class OpenCFBenchmarkEvaluator:
             raise ValueError(
                 f"❌ REJECTED {filename}: No prediction data found (Time >= 3.0s). Did you only submit the input history?")
 
+        # 4. Check Sample ID Limit (Max 6 samples: IDs 0-5)
+        if 'sample_id' in df.columns:
+            # Check if any ID is outside the allowed range [0, 5]
+            if not df['sample_id'].between(0, 5).all():
+                max_id = df['sample_id'].max()
+                raise ValueError(
+                    f"❌ REJECTED {filename}: Invalid sample_id {max_id} found. Allowed IDs are 0 to 5 (Max 6 stochastic samples).")
+
         return True
 
     def evaluate(self, submission_path):

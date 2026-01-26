@@ -1,4 +1,4 @@
-# OpenCF Benchmark: Data-Driven Car-Following Evaluation
+# OpenCF Benchmark: Car-Following Model Evaluation
 
 [**Sungyong Chung**](https://scholar.google.com/citations?user=7jX4Aw8AAAAJ&hl=en&oi=ao) &nbsp;•&nbsp; [**Alireza Talebpour**](https://scholar.google.com/citations?user=lW4PAysAAAAJ&hl=en) &nbsp;•&nbsp; [**Yanlin Zhang**](https://scholar.google.com/citations?user=qhO_nfcAAAAJ&hl=en)
 
