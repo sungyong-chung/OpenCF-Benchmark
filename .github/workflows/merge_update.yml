@@ -1,9 +1,15 @@
 name: Update Leaderboard Website
+
 on:
+  # Allow clicking the "Run workflow" button manually
+  workflow_dispatch:
+
   push:
     branches: [ main ]
     paths:
-      - 'submissions/**'
+      - 'submissions/**'       # Run when someone submits a model
+      - 'scripts/**'           # Run when you update the logic
+      - '.github/workflows/**' # Run when you update this file
 
 jobs:
   update-page:
