@@ -16,6 +16,7 @@
             --uiuc-orange: #E84A27;
             --uiuc-cloud: #f8f9fa;
             --text-dark: #333;
+            --border-color: #ddd;
         }
 
         body {
@@ -24,15 +25,19 @@
             color: var(--text-dark);
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         /* --- Header Section --- */
         header {
             background-color: var(--uiuc-navy);
             color: white;
-            padding: 1.5rem 0;
+            padding: 2rem 0;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             position: relative;
+            z-index: 10;
         }
 
         .header-container {
@@ -41,6 +46,7 @@
             padding: 0 2rem;
             display: flex;
             align-items: center;
+            justify-content: space-between;
         }
 
         .brand-text h1 {
@@ -53,13 +59,6 @@
 
         .brand-text span {
             color: var(--uiuc-orange);
-        }
-
-        .header-line {
-            width: 2px;
-            height: 50px;
-            background-color: rgba(255,255,255,0.3);
-            margin: 0 1.5rem;
         }
 
         .nav-links a {
@@ -76,10 +75,9 @@
 
         /* --- Main Content --- */
         .main-container {
-            max-width: 95%; /* Very wide layout */
-            margin: -3rem auto 2rem; /* Overlap header slightly */
-            position: relative;
-            z-index: 2;
+            max-width: 98%;
+            margin: 2rem auto;
+            flex: 1;
         }
 
         .card-custom {
@@ -88,7 +86,6 @@
             box-shadow: 0 8px 30px rgba(0,0,0,0.08);
             border: none;
             overflow: hidden;
-            padding: 0;
         }
 
         .card-header-custom {
@@ -115,13 +112,30 @@
 
         .table {
             margin-bottom: 0;
-            font-size: 0.9rem; /* Smaller text as requested */
+            font-size: 0.85rem;
             width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
         }
 
         thead {
             background-color: #f8f9fa;
         }
+
+        /* Super Headers */
+        .super-header {
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: white;
+            padding: 0.5rem !important;
+            border-bottom: none;
+        }
+
+        .bg-dynamics { background-color: #1E3A5F; }
+        .bg-short { background-color: #E84A27; }
+        .bg-long { background-color: #2D6A4F; }
 
         th {
             font-family: 'Montserrat', sans-serif;
@@ -133,7 +147,9 @@
             padding: 1rem 0.5rem !important;
             cursor: pointer;
             user-select: none;
-            white-space: nowrap; /* Prevent wrapping headers */
+            white-space: nowrap;
+            border-bottom: 2px solid var(--border-color);
+            background-color: #f8f9fa;
         }
 
         th:hover {
@@ -141,60 +157,33 @@
             color: var(--uiuc-orange);
         }
 
-        th i {
-            margin-left: 5px;
-            opacity: 0.3;
-        }
-
-        th:hover i {
-            opacity: 1;
+        /* Vertical Dividers */
+        .border-right-thick {
+            border-right: 2px solid #ccc !important;
         }
 
         td {
-            padding: 0.8rem 0.5rem !important;
+            padding: 0.7rem 0.5rem !important;
             vertical-align: middle;
             border-bottom: 1px solid #eee;
             color: #444;
-            font-variant-numeric: tabular-nums; /* Aligns numbers nicely */
+            font-variant-numeric: tabular-nums;
         }
 
-        /* Rank Column */
+        /* Column Specifics */
         td.rank-col {
             font-weight: 700;
             color: var(--uiuc-orange);
             text-align: center;
-            width: 50px;
         }
 
-        /* Model Column */
         td.model-col {
             font-weight: 600;
             color: var(--uiuc-navy);
         }
 
-        /* Hover Effect */
-        tbody tr:hover {
-            background-color: #fcfcfc;
-        }
-
-        /* Badge for P-Value */
-        .badge-pass {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-weight: 700;
-            font-size: 0.8rem;
-        }
-
-        .badge-fail {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-weight: 700;
-            font-size: 0.8rem;
-        }
+        .badge-pass { background-color: #d4edda; color: #155724; padding: 4px 8px; border-radius: 4px; font-weight: 700; }
+        .badge-fail { background-color: #f8d7da; color: #721c24; padding: 4px 8px; border-radius: 4px; font-weight: 700; }
 
         .best-score {
             font-weight: 800;
@@ -203,11 +192,46 @@
             text-decoration-color: var(--uiuc-orange);
         }
 
-        footer {
-            text-align: center;
+        /* --- Legend --- */
+        .metrics-legend {
+            background: white;
             padding: 2rem;
-            color: #888;
-            font-size: 0.85rem;
+            margin-top: 2rem;
+            border-top: 1px solid #eee;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 Columns for 3 Groups */
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .metric-group h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #eee;
+        }
+
+        .metric-group.dynamics h4 { color: #1E3A5F; border-color: #1E3A5F; }
+        .metric-group.short h4 { color: #E84A27; border-color: #E84A27; }
+        .metric-group.long h4 { color: #2D6A4F; border-color: #2D6A4F; }
+
+        .metric-item { margin-bottom: 1rem; }
+        .metric-item strong { display: block; color: var(--text-dark); font-size: 0.85rem; margin-bottom: 0.2rem; }
+        .metric-item p { font-size: 0.8rem; color: #666; margin: 0; line-height: 1.4; }
+
+        footer {
+            background: var(--uiuc-navy);
+            color: rgba(255,255,255,0.6);
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.8rem;
+            margin-top: auto;
         }
     </style>
 </head>
@@ -218,9 +242,6 @@
             <div class="brand-text">
                 <h1>OpenCF <span>Benchmark</span></h1>
             </div>
-
-            <div class="header-line"></div>
-
             <div class="nav-links">
                 <a href="https://github.com/sungyong-chung/OpenCF-Benchmark" target="_blank"><i class="fab fa-github"></i> GitHub</a>
                 <a href="https://waymo.com/open/" target="_blank">WOMD Data</a>
@@ -239,15 +260,24 @@
                 <table class="table table-hover" id="leaderboardTable">
                     <thead>
                         <tr>
+                            <th colspan="2" style="background: white; border: none;"></th> <th colspan="2" class="super-header bg-dynamics">Dynamics (Turing Test)</th>
+                            <th colspan="3" class="super-header bg-short">One-Step Prediction (t=3.0s)</th>
+                            <th colspan="3" class="super-header bg-long">Open-Loop Prediction (Full Horizon)</th>
+                        </tr>
+                        <tr>
                             <th class="text-center" onclick="sortTable(0)">Rank <i class="fas fa-sort"></i></th>
-                            <th onclick="sortTable(1)">Model <i class="fas fa-sort"></i></th>
-                            <th onclick="sortTable(2)">Turing Test <br><small>(P-Value)</small> <i class="fas fa-sort"></i></th>
-                            <th onclick="sortTable(3)">RMSE (v) <br><small>[m/s]</small> <i class="fas fa-sort"></i></th>
-                            <th onclick="sortTable(4)">RMSE (s) <br><small>[m]</small> <i class="fas fa-sort"></i></th>
-                            <th onclick="sortTable(5)">RMSE (a) <br><small>[m/s²]</small> <i class="fas fa-sort"></i></th>
-                            <th onclick="sortTable(6)">Collision <br><small>[%]</small> <i class="fas fa-sort"></i></th>
-                            <th onclick="sortTable(7)">minADE <br><small>[m]</small> <i class="fas fa-sort"></i></th>
-                            <th onclick="sortTable(8)">minFDE <br><small>[m]</small> <i class="fas fa-sort"></i></th>
+                            <th class="border-right-thick" onclick="sortTable(1)">Model <i class="fas fa-sort"></i></th>
+
+                            <th onclick="sortTable(2)">Avg Trans<br><small>Prob</small> <i class="fas fa-sort"></i></th>
+                            <th class="border-right-thick" onclick="sortTable(3)">MW Test <br><small>(P-Value)</small> <i class="fas fa-sort"></i></th>
+
+                            <th onclick="sortTable(4)">RMSE (v) <br><small>[m/s]</small> <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable(5)">RMSE (s) <br><small>[m]</small> <i class="fas fa-sort"></i></th>
+                            <th class="border-right-thick" onclick="sortTable(6)">RMSE (a) <br><small>[m/s²]</small> <i class="fas fa-sort"></i></th>
+
+                            <th onclick="sortTable(7)">Collision <br><small>[%]</small> <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable(8)">minADE <br><small>[m]</small> <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable(9)">minFDE <br><small>[m]</small> <i class="fas fa-sort"></i></th>
                         </tr>
                     </thead>
                     <tbody id="table-body">
@@ -257,18 +287,53 @@
         </div>
     </div>
 
+    <section class="metrics-legend">
+        <div class="metrics-grid">
+            <div class="metric-group dynamics">
+                <h4>Dynamics (Turing Test)</h4>
+                <div class="metric-item">
+                    <strong>Avg Transition Probability</strong>
+                    <p>Mean likelihood of generated trajectories based on the calibrated Markov Chain. Higher is more "human-like".</p>
+                </div>
+                <div class="metric-item">
+                    <strong>MW Test (Mann-Whitney U)</strong>
+                    <p>Statistical comparison of probability distributions. P-Value > 0.05 indicates indistinguishable behavior.</p>
+                </div>
+            </div>
+
+            <div class="metric-group short">
+                <h4>One-Step Prediction (Short-term)</h4>
+                <div class="metric-item">
+                    <strong>RMSE (v, s, a)</strong>
+                    <p>Root Mean Square Error for Speed, Spacing, and Acceleration at the first predicted timestep (t=3.0s).</p>
+                </div>
+            </div>
+
+            <div class="metric-group long">
+                <h4>Open-Loop Prediction (Long-term)</h4>
+                <div class="metric-item">
+                    <strong>Collision Rate</strong>
+                    <p>% of test pairs where follower collides with leader during the full prediction horizon.</p>
+                </div>
+                <div class="metric-item">
+                    <strong>minADE / minFDE</strong>
+                    <p>Minimum Average/Final Displacement Error over K stochastic samples (Geometric accuracy).</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <footer>
         &copy; 2025 OpenCF Benchmark &bull; Powered by GitHub Actions
     </footer>
 
     <script>
-        // Column Configuration
-        // type: 'number' or 'string'
-        // order: 'asc' (lower is better) or 'desc' (higher is better)
+        // Updated Column Config
         const columns = [
-            { key: 'rank', type: 'number', order: 'asc' }, // Placeholder
+            { key: 'rank', type: 'number', order: 'asc' },
             { key: 'Model', type: 'string', order: 'asc' },
-            { key: 'P-Value', type: 'number', order: 'desc' }, // Higher P is better
+            { key: 'Avg Trans Prob', type: 'number', order: 'desc' }, // Swapped position
+            { key: 'MW Test (p)', type: 'number', order: 'desc' },    // Swapped position
             { key: 'RMSE (v)', type: 'number', order: 'asc' },
             { key: 'RMSE (s)', type: 'number', order: 'asc' },
             { key: 'RMSE (a)', type: 'number', order: 'asc' },
@@ -278,29 +343,24 @@
         ];
 
         let tableData = [];
-        let sortColIndex = 3; // Default sort by RMSE (v)
-        let sortAscending = true; // Default to lowest error first
+        let sortColIndex = 4; // Default sort by RMSE (v)
+        let sortAscending = true;
 
         async function loadLeaderboard() {
             try {
-                // Add timestamp to prevent caching
                 const response = await fetch('leaderboard_data.json?t=' + new Date().getTime());
                 if (!response.ok) throw new Error("Failed to load data");
-
                 tableData = await response.json();
-
-                // Add fake date for demo (or use real if available)
                 document.getElementById('last-updated').innerText = new Date().toLocaleDateString();
-
                 renderTable();
             } catch (error) {
                 console.error("Error:", error);
-                document.getElementById('table-body').innerHTML = `<tr><td colspan="9" class="text-center py-4">Failed to load leaderboard data. Please check back later.</td></tr>`;
+                document.getElementById('table-body').innerHTML = `<tr><td colspan="10" class="text-center py-4">Loading data...</td></tr>`;
             }
         }
 
         function formatNumber(num, digits = 3) {
-            if (typeof num !== 'number') return num;
+            if (typeof num !== 'number') return '-';
             return num.toFixed(digits);
         }
 
@@ -308,11 +368,10 @@
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
 
-            // 1. Sort Data
             tableData.sort((a, b) => {
                 const key = columns[sortColIndex].key;
-                const valA = a[key];
-                const valB = b[key];
+                const valA = a[key] !== undefined ? a[key] : -999;
+                const valB = b[key] !== undefined ? b[key] : -999;
 
                 if (columns[sortColIndex].type === 'string') {
                     return sortAscending ? valA.localeCompare(valB) : valB.localeCompare(valA);
@@ -321,39 +380,39 @@
                 }
             });
 
-            // 2. Find min/max for highlighting "Best" scores
-            // We calculate this dynamically for every numerical column
             const bestScores = {};
             columns.forEach(col => {
                 if (col.type === 'number' && col.key !== 'rank') {
-                    const values = tableData.map(row => row[col.key]);
-                    // If order is 'asc', best is min. If 'desc', best is max.
+                    const values = tableData.map(row => row[col.key] !== undefined ? row[col.key] : (col.order === 'asc' ? 9999 : -9999));
                     bestScores[col.key] = col.order === 'asc' ? Math.min(...values) : Math.max(...values);
                 }
             });
 
-            // 3. Generate Rows
             tableData.forEach((row, index) => {
                 const tr = document.createElement('tr');
-
-                // Rank
                 const rank = index + 1;
 
-                // P-Value Formatting
-                const pVal = row['P-Value'];
+                // MW Test P-Value
+                const pVal = row['MW Test (p)'] !== undefined ? row['MW Test (p)'] : (row['P-Value'] || 0);
                 const isPass = pVal > 0.05;
                 const pValBadge = `<span class="${isPass ? 'badge-pass' : 'badge-fail'}">${formatNumber(pVal, 3)}</span>`;
 
-                // Helper to check if this cell is the "Best"
+                // Avg Trans Prob
+                const avgProb = row['Avg Trans Prob'] !== undefined ? row['Avg Trans Prob'] : 0;
+
                 const isBest = (key, val) => val === bestScores[key] ? 'best-score' : '';
 
                 tr.innerHTML = `
                     <td class="rank-col">#${rank}</td>
-                    <td class="model-col">${row['Model']}</td>
-                    <td>${pValBadge}</td>
+                    <td class="model-col border-right-thick">${row['Model']}</td>
+
+                    <td class="${isBest('Avg Trans Prob', avgProb)}">${formatNumber(avgProb, 3)}</td>
+                    <td class="border-right-thick">${pValBadge}</td>
+
                     <td class="${isBest('RMSE (v)', row['RMSE (v)'])}">${formatNumber(row['RMSE (v)'])}</td>
                     <td class="${isBest('RMSE (s)', row['RMSE (s)'])}">${formatNumber(row['RMSE (s)'])}</td>
-                    <td class="${isBest('RMSE (a)', row['RMSE (a)'])}">${formatNumber(row['RMSE (a)'])}</td>
+                    <td class="border-right-thick ${isBest('RMSE (a)', row['RMSE (a)'])}">${formatNumber(row['RMSE (a)'])}</td>
+
                     <td class="${isBest('Collision Rate (%)', row['Collision Rate (%)'])}">${formatNumber(row['Collision Rate (%)'])}</td>
                     <td class="${isBest('minADE', row['minADE'])}">${formatNumber(row['minADE'])}</td>
                     <td class="${isBest('minFDE', row['minFDE'])}">${formatNumber(row['minFDE'])}</td>
@@ -363,14 +422,10 @@
         }
 
         function sortTable(columnIndex) {
-            // If clicking the same column, toggle order
             if (sortColIndex === columnIndex) {
                 sortAscending = !sortAscending;
             } else {
-                // New column: reset to default order for that column
                 sortColIndex = columnIndex;
-                // If it's P-Value (index 2), default to Descending (High is good)
-                // If it's Error (index 3+), default to Ascending (Low is good)
                 sortAscending = columns[columnIndex].order === 'asc';
             }
             renderTable();
@@ -380,16 +435,15 @@
         function updateHeaderIcons() {
             const headers = document.querySelectorAll('th i');
             headers.forEach((icon, index) => {
-                icon.className = 'fas fa-sort'; // Reset
+                icon.className = 'fas fa-sort';
                 if (index === sortColIndex) {
                     icon.className = sortAscending ? 'fas fa-sort-up' : 'fas fa-sort-down';
                     icon.style.opacity = '1';
-                    icon.style.color = '#E84A27'; // UIUC Orange
+                    icon.style.color = '#E84A27';
                 }
             });
         }
 
-        // Initialize
         loadLeaderboard();
     </script>
 </body>
