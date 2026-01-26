@@ -1,0 +1,58 @@
+name: Evaluate Submission
+
+on: [pull_request_target]
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+    steps:
+      # 1. Checkout trusted code (from main)
+      - name: Checkout Main Repo
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      # 2. Checkout the User's untrusted CSV (into a temporary folder)
+      - name: Checkout PR Submission
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: tmp_pr_data
+
+      # 3. Unzip the Ground Truth using the Secret Key
+      - name: Decrypt Ground Truth
+        run: |
+          unzip -P "${{ secrets.GT_PASSWORD }}" benchmark_data/ground_truth.zip -d benchmark_data/
+          # Verify it exists
+          ls -l benchmark_data/test_ground_truth.csv
+
+      # 4. Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      # 5. Install Dependencies
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # 6. Run Evaluation (Using Trusted Script + Untrusted CSV)
+      - name: Run Evaluation
+        id: eval
+        run: |
+          # Find CSVs in the PR's temp folder
+          files=$(find tmp_pr_data/submissions -name "*.csv")
+          
+          if [ -z "$files" ]; then
+            echo "No submission files found in PR."
+          else
+            for file in $files; do
+              echo "Evaluating $file..."
+              # We pass the file from the temp folder to our trusted script
+              python scripts/evaluate_submission.py "$file" > result.json
+              cat result.json
+            done
+          fi

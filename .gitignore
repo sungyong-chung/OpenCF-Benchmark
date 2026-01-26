@@ -1,0 +1,23 @@
+# Ignore Mac system files
+.DS_Store
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore large Data files
+*.parquet
+
+# Ignore the preparation script
+scripts/00_prepare_benchmark_data.py
+
+# Don't show the ground truth
+benchmark_data/test_ground_truth.csv
+baselines/submissions/
+
+# Provide training set from Google Drive.
+benchmark_data/train.csv
+
+# Ignore local IDE settings
+.idea/
+.vscode/
