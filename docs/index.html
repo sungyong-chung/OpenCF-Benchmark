@@ -257,7 +257,7 @@
                 </div>
                 <div class="metric-item">
                     <strong>MW Test (Mann-Whitney U)</strong>
-                    <p>P-Value > 0.05 indicates behavior indistinguishable from Ground Truth.</p>
+                    <p>P-Value > 0.05 indicates the model's transition distribution is statistically indistinguishable from the Ground Truth.</p>
                 </div>
             </div>
             <div class="metric-group short">
@@ -291,10 +291,10 @@
         const columns = [
             { key: 'rank', type: 'number', order: 'asc' },
             { key: 'Model', type: 'string', order: 'asc' },
-            { key: 'Avg Trans Prob', type: 'number', order: 'deviation' }, // NEW SORT TYPE
+            { key: 'Avg Trans Prob', type: 'number', order: 'deviation' },
             { key: 'MW Test (p)', type: 'number', order: 'desc' },
-            { key: 'RMSE (v)', type: 'number', order: 'asc' },
             { key: 'RMSE (s)', type: 'number', order: 'asc' },
+            { key: 'RMSE (v)', type: 'number', order: 'asc' },
             { key: 'RMSE (a)', type: 'number', order: 'asc' },
             { key: 'Collision Rate (%)', type: 'number', order: 'asc' },
             { key: 'minADE', type: 'number', order: 'asc' },
@@ -302,7 +302,7 @@
         ];
 
         let tableData = [];
-        let sortColIndex = 4; // Default to RMSE(v)
+        let sortColIndex = 5; // Default to RMSE(a)
         let sortAscending = true; // Default to 'Low is good'
 
         async function init() {
@@ -401,8 +401,8 @@
                         <td class="${isBest('Avg Trans Prob', avgProb)}">${formatNumber(avgProb)}</td>
                         <td class="border-right-thick">${pBadge}</td>
 
-                        <td class="${isBest('RMSE (v)', row['RMSE (v)'])}">${formatNumber(row['RMSE (v)'])}</td>
                         <td class="${isBest('RMSE (s)', row['RMSE (s)'])}">${formatNumber(row['RMSE (s)'])}</td>
+                        <td class="${isBest('RMSE (v)', row['RMSE (v)'])}">${formatNumber(row['RMSE (v)'])}</td>
                         <td class="border-right-thick ${isBest('RMSE (a)', row['RMSE (a)'])}">${formatNumber(row['RMSE (a)'])}</td>
 
                         <td class="${isBest('Collision Rate (%)', row['Collision Rate (%)'])}">${formatNumber(row['Collision Rate (%)'])}</td>
