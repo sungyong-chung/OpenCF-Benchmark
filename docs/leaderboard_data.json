@@ -1,1 +1,189 @@
-[]
+[
+    {
+        "Model": "FVDM_CTH_RMSE_a",
+        "P-Value": 0.0651,
+        "Passed": true,
+        "RMSE (v)": 0.073,
+        "RMSE (s)": 0.019,
+        "RMSE (a)": 0.695,
+        "Collision Rate (%)": 1.8,
+        "minADE": 0.873,
+        "minFDE": 3.032
+    },
+    {
+        "Model": "FVDM_CTH_RMSE_v",
+        "P-Value": 0.0236,
+        "Passed": false,
+        "RMSE (v)": 0.076,
+        "RMSE (s)": 0.019,
+        "RMSE (a)": 0.72,
+        "Collision Rate (%)": 1.0,
+        "minADE": 0.813,
+        "minFDE": 2.866
+    },
+    {
+        "Model": "FVDM_SIGMOID_RMSE_v",
+        "P-Value": 0.0168,
+        "Passed": false,
+        "RMSE (v)": 0.076,
+        "RMSE (s)": 0.019,
+        "RMSE (a)": 0.718,
+        "Collision Rate (%)": 1.0,
+        "minADE": 0.811,
+        "minFDE": 2.843
+    },
+    {
+        "Model": "FVDM_SIGMOID_RMSE_s",
+        "P-Value": 0.0109,
+        "Passed": false,
+        "RMSE (v)": 0.079,
+        "RMSE (s)": 0.019,
+        "RMSE (a)": 0.742,
+        "Collision Rate (%)": 0.8,
+        "minADE": 0.806,
+        "minFDE": 2.826
+    },
+    {
+        "Model": "FVDM_CTH_RMSE_s",
+        "P-Value": 0.0114,
+        "Passed": false,
+        "RMSE (v)": 0.079,
+        "RMSE (s)": 0.019,
+        "RMSE (a)": 0.738,
+        "Collision Rate (%)": 0.8,
+        "minADE": 0.798,
+        "minFDE": 2.804
+    },
+    {
+        "Model": "VAN_AREM_RMSE_a",
+        "P-Value": 0.0144,
+        "Passed": false,
+        "RMSE (v)": 0.081,
+        "RMSE (s)": 0.019,
+        "RMSE (a)": 0.771,
+        "Collision Rate (%)": 1.6,
+        "minADE": 0.93,
+        "minFDE": 3.13
+    },
+    {
+        "Model": "VAN_AREM_RMSE_v",
+        "P-Value": 0.0031,
+        "Passed": false,
+        "RMSE (v)": 0.083,
+        "RMSE (s)": 0.019,
+        "RMSE (a)": 0.785,
+        "Collision Rate (%)": 0.6,
+        "minADE": 0.868,
+        "minFDE": 2.974
+    },
+    {
+        "Model": "VAN_AREM_RMSE_s",
+        "P-Value": 0.0003,
+        "Passed": false,
+        "RMSE (v)": 0.089,
+        "RMSE (s)": 0.019,
+        "RMSE (a)": 0.832,
+        "Collision Rate (%)": 0.2,
+        "minADE": 0.833,
+        "minFDE": 2.863
+    },
+    {
+        "Model": "GIPPS_RMSE_a",
+        "P-Value": 0.5707,
+        "Passed": true,
+        "RMSE (v)": 0.095,
+        "RMSE (s)": 0.019,
+        "RMSE (a)": 0.898,
+        "Collision Rate (%)": 0.0,
+        "minADE": 1.028,
+        "minFDE": 3.33
+    },
+    {
+        "Model": "GIPPS_RMSE_v",
+        "P-Value": 0.328,
+        "Passed": true,
+        "RMSE (v)": 0.107,
+        "RMSE (s)": 0.019,
+        "RMSE (a)": 1.045,
+        "Collision Rate (%)": 0.0,
+        "minADE": 0.974,
+        "minFDE": 3.186
+    },
+    {
+        "Model": "GIPPS_RMSE_s",
+        "P-Value": 0.197,
+        "Passed": true,
+        "RMSE (v)": 0.11,
+        "RMSE (s)": 0.019,
+        "RMSE (a)": 1.076,
+        "Collision Rate (%)": 0.0,
+        "minADE": 0.977,
+        "minFDE": 3.199
+    },
+    {
+        "Model": "IDM_RMSE_a",
+        "P-Value": 0.1319,
+        "Passed": true,
+        "RMSE (v)": 0.162,
+        "RMSE (s)": 0.02,
+        "RMSE (a)": 1.498,
+        "Collision Rate (%)": 0.0,
+        "minADE": 1.312,
+        "minFDE": 3.743
+    },
+    {
+        "Model": "SIDM_RMSE_a",
+        "P-Value": 0.0312,
+        "Passed": false,
+        "RMSE (v)": 0.169,
+        "RMSE (s)": 0.02,
+        "RMSE (a)": 1.558,
+        "Collision Rate (%)": 0.0,
+        "minADE": 1.317,
+        "minFDE": 3.722
+    },
+    {
+        "Model": "IDM_RMSE_v",
+        "P-Value": 0.1326,
+        "Passed": true,
+        "RMSE (v)": 0.208,
+        "RMSE (s)": 0.021,
+        "RMSE (a)": 2.08,
+        "Collision Rate (%)": 0.0,
+        "minADE": 0.998,
+        "minFDE": 3.086
+    },
+    {
+        "Model": "SIDM_RMSE_v",
+        "P-Value": 0.0421,
+        "Passed": false,
+        "RMSE (v)": 0.243,
+        "RMSE (s)": 0.022,
+        "RMSE (a)": 2.139,
+        "Collision Rate (%)": 0.0,
+        "minADE": 1.012,
+        "minFDE": 3.126
+    },
+    {
+        "Model": "SIDM_RMSE_s",
+        "P-Value": 0.0,
+        "Passed": false,
+        "RMSE (v)": 0.245,
+        "RMSE (s)": 0.022,
+        "RMSE (a)": 2.136,
+        "Collision Rate (%)": 0.0,
+        "minADE": 0.895,
+        "minFDE": 2.735
+    },
+    {
+        "Model": "IDM_RMSE_s",
+        "P-Value": 0.0062,
+        "Passed": false,
+        "RMSE (v)": 0.251,
+        "RMSE (s)": 0.022,
+        "RMSE (a)": 2.015,
+        "Collision Rate (%)": 0.0,
+        "minADE": 0.965,
+        "minFDE": 3.019
+    }
+]
