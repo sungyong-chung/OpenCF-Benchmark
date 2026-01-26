@@ -157,7 +157,6 @@
             color: var(--uiuc-orange);
         }
 
-        /* Vertical Dividers */
         .border-right-thick {
             border-right: 2px solid #ccc !important;
         }
@@ -170,7 +169,6 @@
             font-variant-numeric: tabular-nums;
         }
 
-        /* Column Specifics */
         td.rank-col {
             font-weight: 700;
             color: var(--uiuc-orange);
@@ -202,7 +200,7 @@
 
         .metrics-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 3 Columns for 3 Groups */
+            grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
             max-width: 1400px;
             margin: 0 auto;
@@ -224,6 +222,8 @@
         .metric-item { margin-bottom: 1rem; }
         .metric-item strong { display: block; color: var(--text-dark); font-size: 0.85rem; margin-bottom: 0.2rem; }
         .metric-item p { font-size: 0.8rem; color: #666; margin: 0; line-height: 1.4; }
+        .metric-item a { color: var(--uiuc-orange); text-decoration: none; font-weight: 600; }
+        .metric-item a:hover { text-decoration: underline; }
 
         footer {
             background: var(--uiuc-navy);
@@ -260,7 +260,8 @@
                 <table class="table table-hover" id="leaderboardTable">
                     <thead>
                         <tr>
-                            <th colspan="2" style="background: white; border: none;"></th> <th colspan="2" class="super-header bg-dynamics">Dynamics (Turing Test)</th>
+                            <th colspan="2" style="background: white; border: none;"></th>
+                            <th colspan="2" class="super-header bg-dynamics">Transition Probability Analysis</th>
                             <th colspan="3" class="super-header bg-short">One-Step Prediction (t=3.0s)</th>
                             <th colspan="3" class="super-header bg-long">Open-Loop Prediction (Full Horizon)</th>
                         </tr>
@@ -268,7 +269,7 @@
                             <th class="text-center" onclick="sortTable(0)">Rank <i class="fas fa-sort"></i></th>
                             <th class="border-right-thick" onclick="sortTable(1)">Model <i class="fas fa-sort"></i></th>
 
-                            <th onclick="sortTable(2)">Avg Trans<br><small>Prob</small> <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable(2)">Geometric Mean<br><small>Prob</small> <i class="fas fa-sort"></i></th>
                             <th class="border-right-thick" onclick="sortTable(3)">MW Test <br><small>(P-Value)</small> <i class="fas fa-sort"></i></th>
 
                             <th onclick="sortTable(4)">RMSE (v) <br><small>[m/s]</small> <i class="fas fa-sort"></i></th>
@@ -290,10 +291,10 @@
     <section class="metrics-legend">
         <div class="metrics-grid">
             <div class="metric-group dynamics">
-                <h4>Dynamics (Turing Test)</h4>
+                <h4>Transition Probability Analysis</h4>
                 <div class="metric-item">
-                    <strong>Avg Transition Probability</strong>
-                    <p>Mean likelihood of generated trajectories based on the calibrated Markov Chain. Higher is more "human-like".</p>
+                    <strong>Geometric Mean Transition Probability</strong>
+                    <p>The geometric mean of the transition probabilities for the generated trajectories. See details: <a href="https://arxiv.org/pdf/2509.03515" target="_blank">arXiv:2509.03515</a></p>
                 </div>
                 <div class="metric-item">
                     <strong>MW Test (Mann-Whitney U)</strong>
@@ -324,16 +325,16 @@
     </section>
 
     <footer>
-        &copy; 2025 OpenCF Benchmark &bull; Powered by GitHub Actions
+        &copy; 2026 OpenCF Benchmark &bull; Powered by GitHub Actions
     </footer>
 
     <script>
-        // Updated Column Config
+        // 5. Fixed Sorting Configuration
         const columns = [
             { key: 'rank', type: 'number', order: 'asc' },
             { key: 'Model', type: 'string', order: 'asc' },
-            { key: 'Avg Trans Prob', type: 'number', order: 'desc' }, // Swapped position
-            { key: 'MW Test (p)', type: 'number', order: 'desc' },    // Swapped position
+            { key: 'Avg Trans Prob', type: 'number', order: 'desc' }, // Index 2
+            { key: 'MW Test (p)', type: 'number', order: 'desc' },    // Index 3
             { key: 'RMSE (v)', type: 'number', order: 'asc' },
             { key: 'RMSE (s)', type: 'number', order: 'asc' },
             { key: 'RMSE (a)', type: 'number', order: 'asc' },
@@ -343,7 +344,7 @@
         ];
 
         let tableData = [];
-        let sortColIndex = 4; // Default sort by RMSE (v)
+        let sortColIndex = 4;
         let sortAscending = true;
 
         async function loadLeaderboard() {
@@ -368,6 +369,7 @@
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
 
+            // Sort
             tableData.sort((a, b) => {
                 const key = columns[sortColIndex].key;
                 const valA = a[key] !== undefined ? a[key] : -999;
@@ -380,6 +382,7 @@
                 }
             });
 
+            // Find Bests
             const bestScores = {};
             columns.forEach(col => {
                 if (col.type === 'number' && col.key !== 'rank') {
@@ -388,16 +391,15 @@
                 }
             });
 
+            // Render
             tableData.forEach((row, index) => {
                 const tr = document.createElement('tr');
                 const rank = index + 1;
 
-                // MW Test P-Value
                 const pVal = row['MW Test (p)'] !== undefined ? row['MW Test (p)'] : (row['P-Value'] || 0);
                 const isPass = pVal > 0.05;
                 const pValBadge = `<span class="${isPass ? 'badge-pass' : 'badge-fail'}">${formatNumber(pVal, 3)}</span>`;
 
-                // Avg Trans Prob
                 const avgProb = row['Avg Trans Prob'] !== undefined ? row['Avg Trans Prob'] : 0;
 
                 const isBest = (key, val) => val === bestScores[key] ? 'best-score' : '';
@@ -406,7 +408,7 @@
                     <td class="rank-col">#${rank}</td>
                     <td class="model-col border-right-thick">${row['Model']}</td>
 
-                    <td class="${isBest('Avg Trans Prob', avgProb)}">${formatNumber(avgProb, 3)}</td>
+                    <td class="${isBest('Avg Trans Prob', avgProb)}">${formatNumber(avgProb, 4)}</td>
                     <td class="border-right-thick">${pValBadge}</td>
 
                     <td class="${isBest('RMSE (v)', row['RMSE (v)'])}">${formatNumber(row['RMSE (v)'])}</td>

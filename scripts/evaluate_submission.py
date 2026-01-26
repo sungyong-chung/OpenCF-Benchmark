@@ -7,14 +7,13 @@ import json
 from scipy.stats import mannwhitneyu
 from sklearn.metrics import mean_squared_error
 
-# PATHS (Relative to Repo Root)
+# PATHS
 GT_PATH = 'benchmark_data/test_ground_truth.csv'
 REF_MODEL_PATH = 'benchmark_data/reference_model.pkl'
 
 
 class OpenCFBenchmarkEvaluator:
     def __init__(self, gt_path=GT_PATH, ref_model_path=REF_MODEL_PATH):
-        # Load Data
         self.gt_df = pd.read_csv(gt_path)
         with open(ref_model_path, 'rb') as f:
             self.ref_model = pickle.load(f)
@@ -22,10 +21,11 @@ class OpenCFBenchmarkEvaluator:
         self.bins = self.ref_model['bins']
         self.trans_probs = self.ref_model['trans_probs']
 
-        # Pre-compute GT probabilities for comparison
+        # Pre-compute GT probabilities
         self.gt_probs = self._compute_trajectory_probs(self.gt_df, is_ground_truth=True)
 
     def _get_bin_indices(self, rel_v, spacing, foll_v):
+        # Digitizing returns numpy ints
         idx_r = np.clip(np.digitize(rel_v, self.bins['rel_v']) - 1, 0, len(self.bins['rel_v']) - 2)
         idx_s = np.clip(np.digitize(spacing, self.bins['spacing']) - 1, 0, len(self.bins['spacing']) - 2)
         idx_f = np.clip(np.digitize(foll_v, self.bins['foll_v']) - 1, 0, len(self.bins['foll_v']) - 2)
@@ -40,6 +40,7 @@ class OpenCFBenchmarkEvaluator:
             l_spd_col, l_dst_col = 'leader_speed_gt', 'leader_dist_gt'
             f_spd_col, f_dst_col = 'follower_speed', 'follower_dist'
 
+        # Robust Grouping
         groups = df.groupby(['CF_pair_id', 'sample_id']) if 'sample_id' in df.columns else df.groupby('CF_pair_id')
 
         for _, group in groups:
@@ -58,12 +59,23 @@ class OpenCFBenchmarkEvaluator:
             idx_r, idx_s, idx_f = self._get_bin_indices(rel_v, spacing, f_speed)
 
             for t in range(len(rel_v) - 1):
-                curr = (idx_r[t], idx_s[t], idx_f[t])
-                nxt = (idx_r[t + 1], idx_s[t + 1], idx_f[t + 1])
+                # CRITICAL FIX: Cast numpy.int64 to python int for dict lookup
+                curr = (int(idx_r[t]), int(idx_s[t]), int(idx_f[t]))
+                nxt = (int(idx_r[t + 1]), int(idx_s[t + 1]), int(idx_f[t + 1]))
+
                 if curr in self.trans_probs and nxt in self.trans_probs[curr]:
-                    log_probs.append(np.log(self.trans_probs[curr][nxt]))
+                    val = self.trans_probs[curr][nxt]
+                    if val > 0:
+                        log_probs.append(np.log(val))
+                    else:
+                        # Handle zero probability case (penalty)
+                        log_probs.append(np.log(1e-9))
+                else:
+                    # Missing transition penalty
+                    log_probs.append(np.log(1e-9))
 
             if log_probs:
+                # Geometric Mean of probabilities for this trajectory
                 probs.append(np.exp(np.mean(log_probs)))
 
         return probs
@@ -84,13 +96,14 @@ class OpenCFBenchmarkEvaluator:
         if eval_df.empty:
             raise ValueError("Merge resulted in empty dataset.")
 
-        # --- METRIC 1: Dynamics (MW Test & Avg Prob) ---
+        # --- METRIC 1: Dynamics ---
         sub_probs = self._compute_trajectory_probs(eval_df, is_ground_truth=False)
         try:
             _, p_value = mannwhitneyu(self.gt_probs, sub_probs, alternative='two-sided')
         except:
             p_value = 0.0
 
+        # Arithmetic mean of the Geometric Means
         avg_trans_prob = np.mean(sub_probs) if sub_probs else 0.0
 
         # --- METRIC 2: One-Step Accuracy ---
@@ -126,8 +139,8 @@ class OpenCFBenchmarkEvaluator:
 
         return {
             "Model": os.path.basename(submission_path).replace('.csv', ''),
-            "Avg Trans Prob": float(f"{avg_trans_prob:.4f}"),
             "MW Test (p)": float(f"{p_value:.4f}"),
+            "Avg Trans Prob": float(f"{avg_trans_prob:.4f}"),
             "RMSE (v)": float(f"{rmse_v:.3f}"),
             "RMSE (s)": float(f"{rmse_s:.3f}"),
             "RMSE (a)": float(f"{rmse_a:.3f}"),
