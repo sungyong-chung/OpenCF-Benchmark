@@ -71,15 +71,15 @@ We use an automated **"Evaluation-as-a-Service"** workflow. You do not need to r
 
 We evaluate models on three dimensions:
 
-### 1. Transition Dynamics (Turing Test)
-We compare the **Geometric Mean Probability (GMP)** of your generated trajectories against the Ground Truth using a **Mann-Whitney U Test**.
-* **PASS:** p-value > 0.05 (Your model's behavior is statistically indistinguishable from real human driving).
+### 1. Transition Probability Analysis
+We compare the **Geometric Mean Transition Probability** of your generated trajectories against the Ground Truth using a **Mann-Whitney U Test**.
+* **PASS:** p-value > 0.05 (Your model's behavior is statistically indistinguishable from the Ground Truth).
 * **FAIL:** p-value < 0.05.
 
 ### 2. One-Step Prediction (Short-term)
 Measures accuracy at exactly `t = 3.0s` (the first predicted step).
-* **RMSE (v):** Root Mean Square Error of Speed.
 * **RMSE (s):** Root Mean Square Error of Spacing.
+* **RMSE (v):** Root Mean Square Error of Speed.
 * **RMSE (a):** Root Mean Square Error of Acceleration.
 
 ### 3. Open-Loop Prediction (Long-term)
