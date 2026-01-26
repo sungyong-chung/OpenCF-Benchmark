@@ -38,7 +38,7 @@
         }
 
         .header-container {
-            width: 100%; /* Full width */
+            width: 100%;
             padding: 0 2rem;
             display: flex;
             align-items: center;
@@ -65,14 +65,14 @@
 
         .main-container {
             width: 100%;
-            padding: 1rem 1rem; /* Minimized padding */
+            padding: 1rem 1rem;
             margin: 0;
             flex: 1;
         }
 
         .card-custom {
             background: white;
-            border-radius: 0; /* Squared off for full width look */
+            border-radius: 0;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             border: none;
             overflow: hidden;
@@ -152,7 +152,6 @@
             text-decoration-color: var(--uiuc-orange);
         }
 
-        /* --- Legend --- */
         .metrics-legend {
             background: white;
             padding: 2rem;
@@ -250,9 +249,9 @@
                 <div class="metric-item">
                     <strong>Geometric Mean Transition Probability</strong>
                     <p>
-                        The geometric mean of the transition probabilities. Higher is more "human-like".
+                        The geometric mean of the transition probabilities. Closer to Ground Truth is better.
                         <br>
-                        <strong>Ground Truth Value: <span id="gt-score-display" style="color: var(--uiuc-navy); font-weight: bold;">Loading...</span></strong>
+                        <strong>Ground Truth Value: <span id="gt-score-display" style="color: var(--uiuc-navy); font-weight: bold;">0.4453</span></strong>
                     </p>
                     <p><a href="https://arxiv.org/pdf/2509.03515" target="_blank">Read the Paper (arXiv:2509.03515)</a></p>
                 </div>
@@ -283,10 +282,16 @@
     </footer>
 
     <script>
+        // CONFIG
+        const GT_GMP_VALUE = 0.4453; // Hardcoded GT Value
+
+        // Column Definitions
+        // order: 'asc' means Lowest is Best. 'desc' means Highest is Best.
+        // 'deviation' means Closest to GT is Best.
         const columns = [
             { key: 'rank', type: 'number', order: 'asc' },
             { key: 'Model', type: 'string', order: 'asc' },
-            { key: 'Avg Trans Prob', type: 'number', order: 'desc' },
+            { key: 'Avg Trans Prob', type: 'number', order: 'deviation' }, // NEW SORT TYPE
             { key: 'MW Test (p)', type: 'number', order: 'desc' },
             { key: 'RMSE (v)', type: 'number', order: 'asc' },
             { key: 'RMSE (s)', type: 'number', order: 'asc' },
@@ -297,23 +302,13 @@
         ];
 
         let tableData = [];
-        let sortColIndex = 4;
-        let sortAscending = true;
+        let sortColIndex = 4; // Default to RMSE(v)
+        let sortAscending = true; // Default to 'Low is good'
 
         async function init() {
             try {
-                // 1. Load Data
                 const resData = await fetch('leaderboard_data.json?t=' + Date.now());
                 if (resData.ok) tableData = await resData.json();
-
-                // 2. Load Metadata (Ground Truth Stats)
-                const resMeta = await fetch('metadata.json?t=' + Date.now());
-                if (resMeta.ok) {
-                    const meta = await resMeta.json();
-                    if (meta.gt_gmp) {
-                        document.getElementById('gt-score-display').innerText = meta.gt_gmp.toFixed(4);
-                    }
-                }
 
                 document.getElementById('last-updated').innerText = new Date().toLocaleDateString();
                 renderTable();
@@ -331,30 +326,53 @@
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
 
-            // 1. Sort the Entire Dataset
+            // 1. Sort Data
             tableData.sort((a, b) => {
-                const key = columns[sortColIndex].key;
+                const col = columns[sortColIndex];
+                const key = col.key;
                 const valA = a[key] !== undefined ? a[key] : -999;
                 const valB = b[key] !== undefined ? b[key] : -999;
-                return columns[sortColIndex].type === 'string'
-                    ? (sortAscending ? valA.localeCompare(valB) : valB.localeCompare(valA))
-                    : (sortAscending ? valA - valB : valB - valA);
+
+                // String Sort
+                if (col.type === 'string') {
+                    return sortAscending ? valA.localeCompare(valB) : valB.localeCompare(valA);
+                }
+
+                // Special Sort: Deviation from GT (Closer is better)
+                if (col.order === 'deviation') {
+                    const diffA = Math.abs(valA - GT_GMP_VALUE);
+                    const diffB = Math.abs(valB - GT_GMP_VALUE);
+                    // Ascending here means "Smallest Difference" (which is what we always want for 'best')
+                    // If sortAscending is false, we invert it to show Worst first.
+                    return sortAscending ? diffA - diffB : diffB - diffA;
+                }
+
+                // Standard Numeric Sort
+                return sortAscending ? valA - valB : valB - valA;
             });
 
-            // 2. Calculate "Best" scores from Full Dataset
+            // 2. Identify "Best" values
             const bestScores = {};
             columns.forEach(col => {
                 if (col.type === 'number' && col.key !== 'rank') {
-                    const values = tableData.map(row => row[col.key] !== undefined ? row[col.key] : (col.order === 'asc' ? 9999 : -9999));
-                    bestScores[col.key] = col.order === 'asc' ? Math.min(...values) : Math.max(...values);
+                    const values = tableData.map(row => row[col.key] !== undefined ? row[col.key] : null).filter(v => v !== null);
+
+                    if (col.order === 'deviation') {
+                        // Find value with minimum difference from GT
+                        bestScores[col.key] = values.reduce((prev, curr) => {
+                            return (Math.abs(curr - GT_GMP_VALUE) < Math.abs(prev - GT_GMP_VALUE) ? curr : prev);
+                        });
+                    } else if (col.order === 'asc') {
+                        bestScores[col.key] = Math.min(...values);
+                    } else {
+                        bestScores[col.key] = Math.max(...values);
+                    }
                 }
             });
 
-            // 3. Filter: Top 20 OR New This Week
+            // 3. Render Top 20 + New
             const ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
             const now = new Date();
-
-            let visibleCount = 0;
 
             tableData.forEach((row, index) => {
                 const rank = index + 1;
@@ -362,19 +380,18 @@
                 const isNew = (now - rowDate) < ONE_WEEK;
                 const isTop20 = rank <= 20;
 
-                // Logic: Show if Top 20 OR (New AND not shown yet)
                 if (isTop20 || isNew) {
                     const tr = document.createElement('tr');
 
-                    // Badges
                     const pVal = row['MW Test (p)'] || 0;
                     const pBadge = `<span class="${pVal > 0.05 ? 'badge-pass' : 'badge-fail'}">${formatNumber(pVal)}</span>`;
 
                     let modelName = row['Model'];
-                    if (isNew && !isTop20) modelName += ` <span class="badge-new">NEW</span>`;
-                    else if (isNew) modelName += ` <span class="badge-new">NEW</span>`;
+                    if (isNew) modelName += ` <span class="badge-new">NEW</span>`;
 
                     const avgProb = row['Avg Trans Prob'] || 0;
+
+                    // Helper to check if value matches Best
                     const isBest = (key, val) => val === bestScores[key] ? 'best-score' : '';
 
                     tr.innerHTML = `
@@ -402,7 +419,10 @@
                 sortAscending = !sortAscending;
             } else {
                 sortColIndex = columnIndex;
-                sortAscending = columns[columnIndex].order === 'asc';
+                // For Deviation, default is True (Smallest Diff is best)
+                // For Asc (Error), default is True (Smallest Error is best)
+                // For Desc (P-Value), default is False (Largest is best)
+                sortAscending = columns[columnIndex].order !== 'desc';
             }
             renderTable();
             updateHeaderIcons();

@@ -3,13 +3,11 @@ import json
 import glob
 import zipfile
 import getpass
-import numpy as np
 from datetime import datetime
 from evaluate_submission import OpenCFBenchmarkEvaluator
 
 SUBMISSIONS_DIR = 'submissions'
 OUTPUT_FILE = 'docs/leaderboard_data.json'
-META_FILE = 'docs/metadata.json'
 BENCHMARK_DIR = 'benchmark_data'
 GT_FILENAME = 'test_ground_truth.csv'
 ZIP_FILENAME = 'test_ground_truth.zip'
@@ -57,13 +55,7 @@ def main():
     try:
         evaluator = OpenCFBenchmarkEvaluator()
 
-        # 1. Calculate & Save Ground Truth Stats (Metadata)
-        gt_gmp = np.mean(evaluator.gt_probs) if evaluator.gt_probs else 0.0
-        with open(META_FILE, 'w') as f:
-            json.dump({"gt_gmp": gt_gmp}, f)
-        print(f"📊 Ground Truth GMP calculated: {gt_gmp:.4f}")
-
-        # 2. Load Existing Dates (to persist them)
+        # Load Existing Dates
         model_dates = {}
         if os.path.exists(OUTPUT_FILE):
             try:
@@ -73,7 +65,7 @@ def main():
                         if 'Model' in row and 'Date' in row:
                             model_dates[row['Model']] = row['Date']
             except:
-                print("⚠️ Could not read old leaderboard data. Starting fresh.")
+                print("⚠️ Could not read old data.")
 
         results = []
         csv_files = glob.glob(os.path.join(SUBMISSIONS_DIR, '*.csv'))
@@ -83,12 +75,12 @@ def main():
             try:
                 res = evaluator.evaluate(file_path)
 
-                # 3. Handle Date Assignment
+                # Assign Date
                 model_name = res['Model']
                 if model_name in model_dates:
-                    res['Date'] = model_dates[model_name]  # Keep original date
+                    res['Date'] = model_dates[model_name]
                 else:
-                    res['Date'] = datetime.now().strftime('%Y-%m-%d')  # New submission
+                    res['Date'] = datetime.now().strftime('%Y-%m-%d')
 
                 results.append(res)
             except Exception as e:
