@@ -7,7 +7,6 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
@@ -30,19 +29,16 @@
             min-height: 100vh;
         }
 
-        /* --- Header Section --- */
         header {
             background-color: var(--uiuc-navy);
             color: white;
-            padding: 2rem 0;
+            padding: 1.5rem 0;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            position: relative;
             z-index: 10;
         }
 
         .header-container {
-            max-width: 1400px;
-            margin: 0 auto;
+            width: 100%; /* Full width */
             padding: 0 2rem;
             display: flex;
             align-items: center;
@@ -52,14 +48,11 @@
         .brand-text h1 {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
-            font-size: 2.2rem;
+            font-size: 2rem;
             margin: 0;
-            letter-spacing: -0.5px;
         }
 
-        .brand-text span {
-            color: var(--uiuc-orange);
-        }
+        .brand-text span { color: var(--uiuc-orange); }
 
         .nav-links a {
             color: rgba(255,255,255,0.8);
@@ -68,47 +61,33 @@
             margin-left: 1.5rem;
             transition: color 0.2s;
         }
+        .nav-links a:hover { color: var(--uiuc-orange); }
 
-        .nav-links a:hover {
-            color: var(--uiuc-orange);
-        }
-
-        /* --- Main Content --- */
         .main-container {
-            max-width: 98%;
-            margin: 2rem auto;
+            width: 100%;
+            padding: 1rem 1rem; /* Minimized padding */
+            margin: 0;
             flex: 1;
         }
 
         .card-custom {
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            border-radius: 0; /* Squared off for full width look */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             border: none;
             overflow: hidden;
         }
 
         .card-header-custom {
             background: white;
-            padding: 1.5rem 2rem;
+            padding: 1rem 1.5rem;
             border-bottom: 2px solid #f0f0f0;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .card-header-custom h2 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--uiuc-navy);
-            margin: 0;
-        }
-
-        /* --- Table Styling --- */
-        .table-responsive {
-            overflow-x: auto;
-        }
+        .table-responsive { overflow-x: auto; }
 
         .table {
             margin-bottom: 0;
@@ -118,18 +97,15 @@
             border-spacing: 0;
         }
 
-        thead {
-            background-color: #f8f9fa;
-        }
+        thead { background-color: #f8f9fa; }
 
-        /* Super Headers */
         .super-header {
             text-align: center;
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
             font-size: 0.8rem;
             color: white;
-            padding: 0.5rem !important;
+            padding: 0.4rem !important;
             border-bottom: none;
         }
 
@@ -143,45 +119,31 @@
             color: var(--uiuc-navy);
             text-transform: uppercase;
             font-size: 0.75rem;
-            letter-spacing: 0.5px;
-            padding: 1rem 0.5rem !important;
+            padding: 0.8rem 0.4rem !important;
             cursor: pointer;
-            user-select: none;
             white-space: nowrap;
             border-bottom: 2px solid var(--border-color);
             background-color: #f8f9fa;
         }
 
-        th:hover {
-            background-color: #e9ecef;
-            color: var(--uiuc-orange);
-        }
+        th:hover { background-color: #e9ecef; color: var(--uiuc-orange); }
 
-        .border-right-thick {
-            border-right: 2px solid #ccc !important;
-        }
+        .border-right-thick { border-right: 2px solid #ccc !important; }
 
         td {
-            padding: 0.7rem 0.5rem !important;
+            padding: 0.6rem 0.4rem !important;
             vertical-align: middle;
             border-bottom: 1px solid #eee;
             color: #444;
             font-variant-numeric: tabular-nums;
         }
 
-        td.rank-col {
-            font-weight: 700;
-            color: var(--uiuc-orange);
-            text-align: center;
-        }
+        td.rank-col { font-weight: 700; color: var(--uiuc-orange); text-align: center; }
+        td.model-col { font-weight: 600; color: var(--uiuc-navy); }
 
-        td.model-col {
-            font-weight: 600;
-            color: var(--uiuc-navy);
-        }
-
-        .badge-pass { background-color: #d4edda; color: #155724; padding: 4px 8px; border-radius: 4px; font-weight: 700; }
-        .badge-fail { background-color: #f8d7da; color: #721c24; padding: 4px 8px; border-radius: 4px; font-weight: 700; }
+        .badge-pass { background-color: #d4edda; color: #155724; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+        .badge-fail { background-color: #f8d7da; color: #721c24; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+        .badge-new { background-color: #fff3cd; color: #856404; padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 0.7rem; margin-left: 5px; }
 
         .best-score {
             font-weight: 800;
@@ -194,7 +156,6 @@
         .metrics-legend {
             background: white;
             padding: 2rem;
-            margin-top: 2rem;
             border-top: 1px solid #eee;
         }
 
@@ -223,7 +184,6 @@
         .metric-item strong { display: block; color: var(--text-dark); font-size: 0.85rem; margin-bottom: 0.2rem; }
         .metric-item p { font-size: 0.8rem; color: #666; margin: 0; line-height: 1.4; }
         .metric-item a { color: var(--uiuc-orange); text-decoration: none; font-weight: 600; }
-        .metric-item a:hover { text-decoration: underline; }
 
         footer {
             background: var(--uiuc-navy);
@@ -236,7 +196,6 @@
     </style>
 </head>
 <body>
-
     <header>
         <div class="header-container">
             <div class="brand-text">
@@ -252,7 +211,7 @@
     <div class="main-container">
         <div class="card-custom">
             <div class="card-header-custom">
-                <h2>Leaderboard Standings</h2>
+                <h2>Leaderboard Standings <small style="font-size: 0.9rem; color: #888; margin-left: 10px;">(Showing Top 20 + New Entries)</small></h2>
                 <small class="text-muted">Last Updated: <span id="last-updated">...</span></small>
             </div>
 
@@ -268,21 +227,17 @@
                         <tr>
                             <th class="text-center" onclick="sortTable(0)">Rank <i class="fas fa-sort"></i></th>
                             <th class="border-right-thick" onclick="sortTable(1)">Model <i class="fas fa-sort"></i></th>
-
                             <th onclick="sortTable(2)">Geometric Mean<br><small>Prob</small> <i class="fas fa-sort"></i></th>
                             <th class="border-right-thick" onclick="sortTable(3)">MW Test <br><small>(P-Value)</small> <i class="fas fa-sort"></i></th>
-
                             <th onclick="sortTable(4)">RMSE (v) <br><small>[m/s]</small> <i class="fas fa-sort"></i></th>
                             <th onclick="sortTable(5)">RMSE (s) <br><small>[m]</small> <i class="fas fa-sort"></i></th>
                             <th class="border-right-thick" onclick="sortTable(6)">RMSE (a) <br><small>[m/s²]</small> <i class="fas fa-sort"></i></th>
-
                             <th onclick="sortTable(7)">Collision <br><small>[%]</small> <i class="fas fa-sort"></i></th>
                             <th onclick="sortTable(8)">minADE <br><small>[m]</small> <i class="fas fa-sort"></i></th>
                             <th onclick="sortTable(9)">minFDE <br><small>[m]</small> <i class="fas fa-sort"></i></th>
                         </tr>
                     </thead>
-                    <tbody id="table-body">
-                        </tbody>
+                    <tbody id="table-body"></tbody>
                 </table>
             </div>
         </div>
@@ -294,31 +249,30 @@
                 <h4>Transition Probability Analysis</h4>
                 <div class="metric-item">
                     <strong>Geometric Mean Transition Probability</strong>
-                    <p>The geometric mean of the transition probabilities for the generated trajectories. See details: <a href="https://arxiv.org/pdf/2509.03515" target="_blank">arXiv:2509.03515</a></p>
+                    <p>
+                        The geometric mean of the transition probabilities. Higher is more "human-like".
+                        <br>
+                        <strong>Ground Truth Value: <span id="gt-score-display" style="color: var(--uiuc-navy); font-weight: bold;">Loading...</span></strong>
+                    </p>
+                    <p><a href="https://arxiv.org/pdf/2509.03515" target="_blank">Read the Paper (arXiv:2509.03515)</a></p>
                 </div>
                 <div class="metric-item">
                     <strong>MW Test (Mann-Whitney U)</strong>
-                    <p>Statistical comparison of probability distributions. P-Value > 0.05 indicates indistinguishable behavior.</p>
+                    <p>P-Value > 0.05 indicates behavior indistinguishable from Ground Truth.</p>
                 </div>
             </div>
-
             <div class="metric-group short">
                 <h4>One-Step Prediction (Short-term)</h4>
                 <div class="metric-item">
                     <strong>RMSE (v, s, a)</strong>
-                    <p>Root Mean Square Error for Speed, Spacing, and Acceleration at the first predicted timestep (t=3.0s).</p>
+                    <p>Root Mean Square Error for Speed, Spacing, and Acceleration at t=3.0s.</p>
                 </div>
             </div>
-
             <div class="metric-group long">
                 <h4>Open-Loop Prediction (Long-term)</h4>
                 <div class="metric-item">
-                    <strong>Collision Rate</strong>
-                    <p>% of test pairs where follower collides with leader during the full prediction horizon.</p>
-                </div>
-                <div class="metric-item">
-                    <strong>minADE / minFDE</strong>
-                    <p>Minimum Average/Final Displacement Error over K stochastic samples (Geometric accuracy).</p>
+                    <strong>Collision Rate / minADE / minFDE</strong>
+                    <p>Safety and geometric accuracy over the full horizon.</p>
                 </div>
             </div>
         </div>
@@ -329,12 +283,11 @@
     </footer>
 
     <script>
-        // 5. Fixed Sorting Configuration
         const columns = [
             { key: 'rank', type: 'number', order: 'asc' },
             { key: 'Model', type: 'string', order: 'asc' },
-            { key: 'Avg Trans Prob', type: 'number', order: 'desc' }, // Index 2
-            { key: 'MW Test (p)', type: 'number', order: 'desc' },    // Index 3
+            { key: 'Avg Trans Prob', type: 'number', order: 'desc' },
+            { key: 'MW Test (p)', type: 'number', order: 'desc' },
             { key: 'RMSE (v)', type: 'number', order: 'asc' },
             { key: 'RMSE (s)', type: 'number', order: 'asc' },
             { key: 'RMSE (a)', type: 'number', order: 'asc' },
@@ -347,42 +300,48 @@
         let sortColIndex = 4;
         let sortAscending = true;
 
-        async function loadLeaderboard() {
+        async function init() {
             try {
-                const response = await fetch('leaderboard_data.json?t=' + new Date().getTime());
-                if (!response.ok) throw new Error("Failed to load data");
-                tableData = await response.json();
+                // 1. Load Data
+                const resData = await fetch('leaderboard_data.json?t=' + Date.now());
+                if (resData.ok) tableData = await resData.json();
+
+                // 2. Load Metadata (Ground Truth Stats)
+                const resMeta = await fetch('metadata.json?t=' + Date.now());
+                if (resMeta.ok) {
+                    const meta = await resMeta.json();
+                    if (meta.gt_gmp) {
+                        document.getElementById('gt-score-display').innerText = meta.gt_gmp.toFixed(4);
+                    }
+                }
+
                 document.getElementById('last-updated').innerText = new Date().toLocaleDateString();
                 renderTable();
             } catch (error) {
-                console.error("Error:", error);
-                document.getElementById('table-body').innerHTML = `<tr><td colspan="10" class="text-center py-4">Loading data...</td></tr>`;
+                console.error(error);
             }
         }
 
-        function formatNumber(num, digits = 3) {
+        function formatNumber(num) {
             if (typeof num !== 'number') return '-';
-            return num.toFixed(digits);
+            return num.toFixed(4);
         }
 
         function renderTable() {
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
 
-            // Sort
+            // 1. Sort the Entire Dataset
             tableData.sort((a, b) => {
                 const key = columns[sortColIndex].key;
                 const valA = a[key] !== undefined ? a[key] : -999;
                 const valB = b[key] !== undefined ? b[key] : -999;
-
-                if (columns[sortColIndex].type === 'string') {
-                    return sortAscending ? valA.localeCompare(valB) : valB.localeCompare(valA);
-                } else {
-                    return sortAscending ? valA - valB : valB - valA;
-                }
+                return columns[sortColIndex].type === 'string'
+                    ? (sortAscending ? valA.localeCompare(valB) : valB.localeCompare(valA))
+                    : (sortAscending ? valA - valB : valB - valA);
             });
 
-            // Find Bests
+            // 2. Calculate "Best" scores from Full Dataset
             const bestScores = {};
             columns.forEach(col => {
                 if (col.type === 'number' && col.key !== 'rank') {
@@ -391,35 +350,50 @@
                 }
             });
 
-            // Render
+            // 3. Filter: Top 20 OR New This Week
+            const ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
+            const now = new Date();
+
+            let visibleCount = 0;
+
             tableData.forEach((row, index) => {
-                const tr = document.createElement('tr');
                 const rank = index + 1;
+                const rowDate = row.Date ? new Date(row.Date) : new Date('2000-01-01');
+                const isNew = (now - rowDate) < ONE_WEEK;
+                const isTop20 = rank <= 20;
 
-                const pVal = row['MW Test (p)'] !== undefined ? row['MW Test (p)'] : (row['P-Value'] || 0);
-                const isPass = pVal > 0.05;
-                const pValBadge = `<span class="${isPass ? 'badge-pass' : 'badge-fail'}">${formatNumber(pVal, 3)}</span>`;
+                // Logic: Show if Top 20 OR (New AND not shown yet)
+                if (isTop20 || isNew) {
+                    const tr = document.createElement('tr');
 
-                const avgProb = row['Avg Trans Prob'] !== undefined ? row['Avg Trans Prob'] : 0;
+                    // Badges
+                    const pVal = row['MW Test (p)'] || 0;
+                    const pBadge = `<span class="${pVal > 0.05 ? 'badge-pass' : 'badge-fail'}">${formatNumber(pVal)}</span>`;
 
-                const isBest = (key, val) => val === bestScores[key] ? 'best-score' : '';
+                    let modelName = row['Model'];
+                    if (isNew && !isTop20) modelName += ` <span class="badge-new">NEW</span>`;
+                    else if (isNew) modelName += ` <span class="badge-new">NEW</span>`;
 
-                tr.innerHTML = `
-                    <td class="rank-col">#${rank}</td>
-                    <td class="model-col border-right-thick">${row['Model']}</td>
+                    const avgProb = row['Avg Trans Prob'] || 0;
+                    const isBest = (key, val) => val === bestScores[key] ? 'best-score' : '';
 
-                    <td class="${isBest('Avg Trans Prob', avgProb)}">${formatNumber(avgProb, 4)}</td>
-                    <td class="border-right-thick">${pValBadge}</td>
+                    tr.innerHTML = `
+                        <td class="rank-col">#${rank}</td>
+                        <td class="model-col border-right-thick">${modelName}</td>
 
-                    <td class="${isBest('RMSE (v)', row['RMSE (v)'])}">${formatNumber(row['RMSE (v)'])}</td>
-                    <td class="${isBest('RMSE (s)', row['RMSE (s)'])}">${formatNumber(row['RMSE (s)'])}</td>
-                    <td class="border-right-thick ${isBest('RMSE (a)', row['RMSE (a)'])}">${formatNumber(row['RMSE (a)'])}</td>
+                        <td class="${isBest('Avg Trans Prob', avgProb)}">${formatNumber(avgProb)}</td>
+                        <td class="border-right-thick">${pBadge}</td>
 
-                    <td class="${isBest('Collision Rate (%)', row['Collision Rate (%)'])}">${formatNumber(row['Collision Rate (%)'])}</td>
-                    <td class="${isBest('minADE', row['minADE'])}">${formatNumber(row['minADE'])}</td>
-                    <td class="${isBest('minFDE', row['minFDE'])}">${formatNumber(row['minFDE'])}</td>
-                `;
-                tbody.appendChild(tr);
+                        <td class="${isBest('RMSE (v)', row['RMSE (v)'])}">${formatNumber(row['RMSE (v)'])}</td>
+                        <td class="${isBest('RMSE (s)', row['RMSE (s)'])}">${formatNumber(row['RMSE (s)'])}</td>
+                        <td class="border-right-thick ${isBest('RMSE (a)', row['RMSE (a)'])}">${formatNumber(row['RMSE (a)'])}</td>
+
+                        <td class="${isBest('Collision Rate (%)', row['Collision Rate (%)'])}">${formatNumber(row['Collision Rate (%)'])}</td>
+                        <td class="${isBest('minADE', row['minADE'])}">${formatNumber(row['minADE'])}</td>
+                        <td class="${isBest('minFDE', row['minFDE'])}">${formatNumber(row['minFDE'])}</td>
+                    `;
+                    tbody.appendChild(tr);
+                }
             });
         }
 
@@ -446,7 +420,7 @@
             });
         }
 
-        loadLeaderboard();
+        init();
     </script>
 </body>
 </html>
