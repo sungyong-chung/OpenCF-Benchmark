@@ -18,7 +18,7 @@ It provides a standardized testbed to benchmark car-following models against rea
 
 This benchmark utilizes data derived from the **Waymo Open Motion Dataset (WOMD)**.
 
-* **Training Data (`train.csv`):** [**DOWNLOAD HERE (Google Drive)**](https://drive.google.com/file/d/1JCrPkS9FUDC4OihimvV7UpYNfeVIBx4E/view?usp=share_link)
+* **Training Data (`train.csv`):** [**DOWNLOAD HERE (Google Drive)**](https://drive.google.com/file/d/1JCrPkS9FUDC4OihimvV7UpYNfeVIBx4E/view?usp=sharing) *(Currently restricted: Access will be open to the public soon!)*
     * *Contains processed leader-follower pairs for model calibration/training.*
     * *You may use this data to train your model, but it is not required for evaluation.*
 * **Test Input (`benchmark_data/test_input.csv`):** Included in this repo.
