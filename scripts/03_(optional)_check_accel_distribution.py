@@ -13,9 +13,9 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # FIXED GRID SETTINGS
 BINS = {
-    'rel_v': np.arange(-10, 10 + 1, 1.0),  # Indices: -10 is 0, -5 is 5, 0 is 10, 5 is 15
-    'spacing': np.arange(0, 45 + 1, 1.0),  # Indices: 10 is 10, 30 is 30
-    'foll_v': np.arange(0, 20 + 1, 1.0)  # Indices: 5 is 5, 15 is 15
+    'rel_v': np.arange(-10, 10 + 1, 0.5),  # Indices: -10 is 0, -5 is 5, 0 is 10, 5 is 15
+    'spacing': np.arange(0, 45 + 1, 0.5),  # Indices: 10 is 10, 30 is 30
+    'foll_v': np.arange(0, 20 + 1, 0.5)  # Indices: 5 is 5, 15 is 15
 }
 
 
@@ -34,9 +34,9 @@ def get_bin_indices(df):
 
 def get_bin_label(r_idx, s_idx, f_idx):
     """Returns a readable string for the bin ranges."""
-    r_val = f"{BINS['rel_v'][r_idx]:.0f} to {BINS['rel_v'][r_idx + 1]:.0f}"
-    s_val = f"{BINS['spacing'][s_idx]:.0f} to {BINS['spacing'][s_idx + 1]:.0f}"
-    f_val = f"{BINS['foll_v'][f_idx]:.0f} to {BINS['foll_v'][f_idx + 1]:.0f}"
+    r_val = f"{BINS['rel_v'][r_idx]:.1f} to {BINS['rel_v'][r_idx + 1]:.1f}"
+    s_val = f"{BINS['spacing'][s_idx]:.1f} to {BINS['spacing'][s_idx + 1]:.1f}"
+    f_val = f"{BINS['foll_v'][f_idx]:.1f} to {BINS['foll_v'][f_idx + 1]:.1f}"
     return f"RelV: {r_val} m/s\nSpacing: {s_val} m\nSpeed: {f_val} m/s"
 
 
@@ -51,20 +51,19 @@ def plot_distributions():
     state_groups = df.groupby(['bin_r', 'bin_s', 'bin_f'])['follower_acceleration']
 
     # --- FILTER CANDIDATES ---
-    # high-density ranges:
-    # RelV: -5 to 5  => Indices 5 to 15
-    # Spacing: 10 to 30 => Indices 10 to 30
-    # Speed: 5 to 15 => Indices 5 to 15
+    # RelV: -5 to 5 (start -10) -> Indices 10 to 30
+    # Spacing: 10 to 30 (start 0) -> Indices 20 to 60
+    # Speed: 5 to 15 (start 0) -> Indices 10 to 30
 
     candidates = []
 
     for state_key, group in state_groups:
         r_idx, s_idx, f_idx = state_key
 
-        # Check range constraints
-        if not (5 <= r_idx <= 15): continue
-        if not (10 <= s_idx <= 30): continue
-        if not (5 <= f_idx <= 15): continue
+        # Check range constraints (Updated Indices)
+        if not (10 <= r_idx <= 30): continue
+        if not (20 <= s_idx <= 60): continue
+        if not (10 <= f_idx <= 30): continue
 
         if len(group) > 50:
             candidates.append(state_key)
@@ -72,6 +71,7 @@ def plot_distributions():
     print(f"Found {len(candidates)} candidate states in the high-density region.")
 
     # --- RANDOM SAMPLING ---
+    random.seed(10)
     if len(candidates) < 6:
         print("Warning: Not enough states meet the criteria. Plotting all found.")
         selected_states = candidates

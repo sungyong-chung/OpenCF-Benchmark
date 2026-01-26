@@ -14,9 +14,9 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # FIXED GRID SETTINGS
 BINS = {
-    'rel_v': np.arange(-10, 10 + 1, 1.0),  # Range: -10 to 10 m/s
-    'spacing': np.arange(0, 45 + 1, 1.0),  # Range: 0 to 45 m
-    'foll_v': np.arange(0, 20 + 1, 1.0)  # Range: 0 to 20 m/s
+    'rel_v': np.arange(-10, 10 + 1, 0.5),  # Range: -10 to 10 m/s
+    'spacing': np.arange(0, 45 + 1, 0.5),  # Range: 0 to 45 m
+    'foll_v': np.arange(0, 20 + 1, 0.5)  # Range: 0 to 20 m/s
 }
 
 
