@@ -2,6 +2,8 @@
 
 [**Sungyong Chung**](https://scholar.google.com/citations?user=7jX4Aw8AAAAJ&hl=en&oi=ao) &nbsp;•&nbsp; [**Alireza Talebpour**](https://scholar.google.com/citations?user=lW4PAysAAAAJ&hl=en) &nbsp;•&nbsp; [**Yanlin Zhang**](https://scholar.google.com/citations?user=qhO_nfcAAAAJ&hl=en)
 
+<br>
+
 [![Leaderboard](https://img.shields.io/badge/Leaderboard-Live-brightgreen)](https://sungyong-chung.github.io/OpenCF-Benchmark/)
 
 **OpenCF-Benchmark** is an open-source evaluation framework for car-following models.
@@ -43,7 +45,7 @@ We use an automated **"Evaluation-as-a-Service"** workflow. You do not need to r
 | Column | Description |
 | :--- | :--- |
 | `CF_pair_id` | ID matching the test set |
-| `sample_id` | `0` for deterministic, `0-N` for stochastic samples |
+| `sample_id` | `0` for deterministic, `0` to `5` for stochastic (Max 6 samples) |
 | `Time` | Time in seconds (must align with ground truth, e.g., 0.1s steps) |
 | `follower_dist` | Longitudinal position (meters) |
 | `follower_speed` | Speed (m/s) |
@@ -102,7 +104,9 @@ OpenCF-Benchmark/
 └── README.md                 # This file
 ```
 
-## Citation
+---
+
+## 📄 Citation
 
 If you use this benchmark or dataset please cite the following work.
 

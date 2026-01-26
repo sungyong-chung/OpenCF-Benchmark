@@ -21,11 +21,9 @@ class OpenCFBenchmarkEvaluator:
         self.bins = self.ref_model['bins']
         self.trans_probs = self.ref_model['trans_probs']
 
-        # Pre-compute GT probabilities
         self.gt_probs = self._compute_trajectory_probs(self.gt_df, is_ground_truth=True)
 
     def _get_bin_indices(self, rel_v, spacing, foll_v):
-        # Digitizing returns numpy ints
         idx_r = np.clip(np.digitize(rel_v, self.bins['rel_v']) - 1, 0, len(self.bins['rel_v']) - 2)
         idx_s = np.clip(np.digitize(spacing, self.bins['spacing']) - 1, 0, len(self.bins['spacing']) - 2)
         idx_f = np.clip(np.digitize(foll_v, self.bins['foll_v']) - 1, 0, len(self.bins['foll_v']) - 2)
@@ -40,7 +38,6 @@ class OpenCFBenchmarkEvaluator:
             l_spd_col, l_dst_col = 'leader_speed_gt', 'leader_dist_gt'
             f_spd_col, f_dst_col = 'follower_speed', 'follower_dist'
 
-        # Robust Grouping
         groups = df.groupby(['CF_pair_id', 'sample_id']) if 'sample_id' in df.columns else df.groupby('CF_pair_id')
 
         for _, group in groups:
@@ -59,31 +56,65 @@ class OpenCFBenchmarkEvaluator:
             idx_r, idx_s, idx_f = self._get_bin_indices(rel_v, spacing, f_speed)
 
             for t in range(len(rel_v) - 1):
-                # CRITICAL FIX: Cast numpy.int64 to python int for dict lookup
                 curr = (int(idx_r[t]), int(idx_s[t]), int(idx_f[t]))
                 nxt = (int(idx_r[t + 1]), int(idx_s[t + 1]), int(idx_f[t + 1]))
 
                 if curr in self.trans_probs and nxt in self.trans_probs[curr]:
                     val = self.trans_probs[curr][nxt]
-                    if val > 0:
-                        log_probs.append(np.log(val))
-                    else:
-                        # Handle zero probability case (penalty)
-                        log_probs.append(np.log(1e-9))
+                    log_probs.append(np.log(val) if val > 0 else np.log(1e-9))
                 else:
-                    # Missing transition penalty
                     log_probs.append(np.log(1e-9))
 
             if log_probs:
-                # Geometric Mean of probabilities for this trajectory
                 probs.append(np.exp(np.mean(log_probs)))
 
         return probs
 
-    def evaluate(self, submission_path):
-        sub_df = pd.read_csv(submission_path)
+    def validate_format(self, df, filename):
+        """Strictly validates the submission format before evaluation."""
 
-        # Merge
+        # 1. Required Columns
+        required_cols = {'CF_pair_id', 'Time', 'follower_dist', 'follower_speed', 'follower_acceleration'}
+        missing = required_cols - set(df.columns)
+        if missing:
+            raise ValueError(f"❌ REJECTED {filename}: Missing columns: {missing}")
+
+        # 2. Check for NaN values in critical columns
+        if df[list(required_cols)].isna().any().any():
+            raise ValueError(f"❌ REJECTED {filename}: Contains NaN (empty) values in required columns.")
+
+        # 3. Check Time format (Must contain prediction horizon)
+        # We expect at least SOME data >= 3.0s
+        if not (df['Time'] >= 3.0).any():
+            raise ValueError(
+                f"❌ REJECTED {filename}: No prediction data found (Time >= 3.0s). Did you only submit the input history?")
+
+        return True
+
+    def evaluate(self, submission_path):
+        filename = os.path.basename(submission_path)
+        try:
+            sub_df = pd.read_csv(submission_path)
+        except Exception:
+            raise ValueError(f"❌ REJECTED {filename}: File is not a valid CSV.")
+
+        # --- 1. VALIDATION ---
+        self.validate_format(sub_df, filename)
+
+        # --- 2. PRE-PROCESSING ---
+        if 'sample_id' not in sub_df.columns:
+            sub_df['sample_id'] = 0
+
+        # Disregard extra stochastic samples (Keep 0-5)
+        sub_df = sub_df[sub_df['sample_id'].between(0, 5)]
+
+        # Filter for Prediction Horizon
+        sub_df = sub_df[sub_df['Time'] >= 3.0]
+
+        if sub_df.empty:
+            raise ValueError(f"❌ REJECTED {filename}: No valid data remains after filtering for Time >= 3.0s.")
+
+        # --- 3. MERGE & EVAL ---
         gt_subset = self.gt_df[['CF_pair_id', 'Time', 'leader_dist', 'leader_speed', 'follower_dist', 'follower_speed',
                                 'follower_acceleration']].copy()
         gt_subset.rename(columns={
@@ -94,19 +125,18 @@ class OpenCFBenchmarkEvaluator:
 
         eval_df = pd.merge(sub_df, gt_subset, on=['CF_pair_id', 'Time'], how='inner')
         if eval_df.empty:
-            raise ValueError("Merge resulted in empty dataset.")
+            raise ValueError(f"❌ REJECTED {filename}: IDs do not match Ground Truth. Check your 'CF_pair_id'.")
 
-        # --- METRIC 1: Dynamics ---
+        # Metrics Calculation
         sub_probs = self._compute_trajectory_probs(eval_df, is_ground_truth=False)
         try:
             _, p_value = mannwhitneyu(self.gt_probs, sub_probs, alternative='two-sided')
         except:
             p_value = 0.0
 
-        # Arithmetic mean of the Geometric Means
         avg_trans_prob = np.mean(sub_probs) if sub_probs else 0.0
 
-        # --- METRIC 2: One-Step Accuracy ---
+        # One-Step
         t3_df = eval_df[(eval_df['Time'].round(1) == 3.0) & (eval_df['sample_id'] == 0)]
         if not t3_df.empty:
             rmse_v = np.sqrt(mean_squared_error(t3_df['follower_speed_gt'], t3_df['follower_speed']))
@@ -115,7 +145,7 @@ class OpenCFBenchmarkEvaluator:
         else:
             rmse_v, rmse_s, rmse_a = 0.0, 0.0, 0.0
 
-        # --- METRIC 3: Open Loop ---
+        # Open-Loop
         collisions, pairs = 0, 0
         ade_list, fde_list = [], []
 
@@ -138,7 +168,7 @@ class OpenCFBenchmarkEvaluator:
                 fde_list.append(np.min(sample_fdes))
 
         return {
-            "Model": os.path.basename(submission_path).replace('.csv', ''),
+            "Model": filename.replace('.csv', ''),
             "MW Test (p)": float(f"{p_value:.4f}"),
             "Avg Trans Prob": float(f"{avg_trans_prob:.4f}"),
             "RMSE (v)": float(f"{rmse_v:.3f}"),
