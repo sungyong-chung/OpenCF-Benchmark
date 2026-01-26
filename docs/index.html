@@ -138,7 +138,7 @@
             font-variant-numeric: tabular-nums;
         }
 
-        td.rank-col { font-weight: 700; color: var(--uiuc-orange); text-align: center; }
+        td.rank-col { font-weight: 700; color: var(--uiuc-orange); text-align: center; white-space: nowrap; }
         td.model-col { font-weight: 600; color: var(--uiuc-navy); }
 
         .badge-pass { background-color: #d4edda; color: #155724; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
@@ -228,8 +228,8 @@
                             <th class="border-right-thick" onclick="sortTable(1)">Model <i class="fas fa-sort"></i></th>
                             <th onclick="sortTable(2)">Geometric Mean Prob<br><small>[%]</small> <i class="fas fa-sort"></i></th>
                             <th class="border-right-thick" onclick="sortTable(3)">MW Test <br><small>(P-Value)</small> <i class="fas fa-sort"></i></th>
-                            <th onclick="sortTable(4)">RMSE (v) <br><small>[m/s]</small> <i class="fas fa-sort"></i></th>
-                            <th onclick="sortTable(5)">RMSE (s) <br><small>[m]</small> <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable(4)">RMSE (s) <br><small>[m]</small> <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable(5)">RMSE (v) <br><small>[m/s]</small> <i class="fas fa-sort"></i></th>
                             <th class="border-right-thick" onclick="sortTable(6)">RMSE (a) <br><small>[m/s²]</small> <i class="fas fa-sort"></i></th>
                             <th onclick="sortTable(7)">Collision <br><small>[%]</small> <i class="fas fa-sort"></i></th>
                             <th onclick="sortTable(8)">minADE <br><small>[m]</small> <i class="fas fa-sort"></i></th>
@@ -302,7 +302,7 @@
         ];
 
         let tableData = [];
-        let sortColIndex = 5; // Default to RMSE(a)
+        let sortColIndex = 5; // Default to RMSE(v)
         let sortAscending = true; // Default to 'Low is good'
 
         async function init() {
@@ -394,8 +394,14 @@
                     // Helper to check if value matches Best
                     const isBest = (key, val) => val === bestScores[key] ? 'best-score' : '';
 
+                    // --- MEDAL LOGIC ---
+                    let rankDisplay = `#${rank}`;
+                    if (rank === 1) rankDisplay = `<i class="fas fa-medal" style="color: #FFD700;"></i> #${rank}`;
+                    else if (rank === 2) rankDisplay = `<i class="fas fa-medal" style="color: #C0C0C0;"></i> #${rank}`;
+                    else if (rank === 3) rankDisplay = `<i class="fas fa-medal" style="color: #CD7F32;"></i> #${rank}`;
+
                     tr.innerHTML = `
-                        <td class="rank-col">#${rank}</td>
+                        <td class="rank-col">${rankDisplay}</td>
                         <td class="model-col border-right-thick">${modelName}</td>
 
                         <td class="${isBest('Avg Trans Prob', avgProb)}">${formatNumber(avgProb)}</td>
@@ -419,9 +425,6 @@
                 sortAscending = !sortAscending;
             } else {
                 sortColIndex = columnIndex;
-                // For Deviation, default is True (Smallest Diff is best)
-                // For Asc (Error), default is True (Smallest Error is best)
-                // For Desc (P-Value), default is False (Largest is best)
                 sortAscending = columns[columnIndex].order !== 'desc';
             }
             renderTable();
