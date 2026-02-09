@@ -76,6 +76,44 @@
         }
     },
     {
+        "Model": "MC_CF_Original",
+        "samples_count": 6,
+        "MW Test (p)": 0.2102,
+        "Avg Trans Prob": 0.2543,
+        "RMSE (v)": 0.077,
+        "RMSE (s)": 0.019,
+        "RMSE (a)": 0.758,
+        "Collision Rate (%)": 2.2,
+        "minADE": 0.866,
+        "minFDE": 2.077,
+        "Date": "2026-02-09",
+        "meta": {
+            "description": "Proposed by Sungyong Chung, Yanlin Zhang, Nachuan Li, Dana Monzer, and Alireza Talebpour, this model introduces a new paradigm of data-driven car-following. It models driving as a Markov process, predicting behavior by randomly sampling accelerations from empirical distributions within discretized state bins.",
+            "calibration": "Calibration-free. It empirically derives state transitions and acceleration distributions directly from the OpenCF Training Set.",
+            "assumptions": "Markovian assumption: Future acceleration depends only on the current state cluster defined by relative speed, spacing, and follower speed.",
+            "paper_link": ""
+        }
+    },
+    {
+        "Model": "MC_CF_Conservative",
+        "samples_count": 6,
+        "MW Test (p)": 0.9306,
+        "Avg Trans Prob": 0.2626,
+        "RMSE (v)": 0.078,
+        "RMSE (s)": 0.018,
+        "RMSE (a)": 0.765,
+        "Collision Rate (%)": 0.2,
+        "minADE": 0.847,
+        "minFDE": 1.988,
+        "Date": "2026-02-09",
+        "meta": {
+            "description": "Proposed by Sungyong Chung, Yanlin Zhang, Nachuan Li, Dana Monzer, and Alireza Talebpour, this is a safety-enhanced variant of the MC-CF paradigm. It incorporates Time-To-Collision (TTC) thresholds to bias acceleration sampling towards lower percentiles in critical scenarios, ensuring safer trajectory generation.",
+            "calibration": "Calibration-free. It empirically derives state transitions and acceleration distributions directly from the OpenCF Training Set.",
+            "assumptions": "Markovian dynamics with probabilistic safety constraints: assumes drivers adopt conservative accelerations (bottom 5-30%) when TTC is below critical thresholds (3s/10s).",
+            "paper_link": ""
+        }
+    },
+    {
         "Model": "FVDM_SIGMOID_RMSE_s",
         "samples_count": 1,
         "MW Test (p)": 0.0186,
