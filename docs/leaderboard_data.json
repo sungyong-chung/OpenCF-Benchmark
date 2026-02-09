@@ -1,6 +1,7 @@
 [
     {
         "Model": "FVDM_CTH_RMSE_a",
+        "samples_count": 1,
         "MW Test (p)": 0.0168,
         "Avg Trans Prob": 0.28,
         "RMSE (v)": 0.073,
@@ -19,6 +20,7 @@
     },
     {
         "Model": "FVDM_SIGMOID_RMSE_a",
+        "samples_count": 1,
         "MW Test (p)": 0.0145,
         "Avg Trans Prob": 0.2819,
         "RMSE (v)": 0.073,
@@ -37,6 +39,7 @@
     },
     {
         "Model": "FVDM_CTH_RMSE_v",
+        "samples_count": 1,
         "MW Test (p)": 0.0053,
         "Avg Trans Prob": 0.2841,
         "RMSE (v)": 0.076,
@@ -55,6 +58,7 @@
     },
     {
         "Model": "FVDM_SIGMOID_RMSE_v",
+        "samples_count": 1,
         "MW Test (p)": 0.0095,
         "Avg Trans Prob": 0.2844,
         "RMSE (v)": 0.076,
@@ -73,6 +77,7 @@
     },
     {
         "Model": "FVDM_SIGMOID_RMSE_s",
+        "samples_count": 1,
         "MW Test (p)": 0.0186,
         "Avg Trans Prob": 0.2823,
         "RMSE (v)": 0.079,
@@ -91,6 +96,7 @@
     },
     {
         "Model": "FVDM_CTH_RMSE_s",
+        "samples_count": 1,
         "MW Test (p)": 0.0051,
         "Avg Trans Prob": 0.2861,
         "RMSE (v)": 0.079,
@@ -109,6 +115,7 @@
     },
     {
         "Model": "VAN_AREM_RMSE_a",
+        "samples_count": 1,
         "MW Test (p)": 0.0124,
         "Avg Trans Prob": 0.2824,
         "RMSE (v)": 0.081,
@@ -127,6 +134,7 @@
     },
     {
         "Model": "VAN_AREM_RMSE_v",
+        "samples_count": 1,
         "MW Test (p)": 0.0056,
         "Avg Trans Prob": 0.2866,
         "RMSE (v)": 0.083,
@@ -145,6 +153,7 @@
     },
     {
         "Model": "VAN_AREM_RMSE_s",
+        "samples_count": 1,
         "MW Test (p)": 0.0002,
         "Avg Trans Prob": 0.2946,
         "RMSE (v)": 0.089,
@@ -163,6 +172,7 @@
     },
     {
         "Model": "GIPPS_RMSE_a",
+        "samples_count": 1,
         "MW Test (p)": 0.266,
         "Avg Trans Prob": 0.2683,
         "RMSE (v)": 0.095,
@@ -181,6 +191,7 @@
     },
     {
         "Model": "GIPPS_RMSE_v",
+        "samples_count": 1,
         "MW Test (p)": 0.1417,
         "Avg Trans Prob": 0.2739,
         "RMSE (v)": 0.107,
@@ -199,6 +210,7 @@
     },
     {
         "Model": "GIPPS_RMSE_s",
+        "samples_count": 1,
         "MW Test (p)": 0.0708,
         "Avg Trans Prob": 0.277,
         "RMSE (v)": 0.11,
@@ -217,6 +229,7 @@
     },
     {
         "Model": "IDM_RMSE_a",
+        "samples_count": 1,
         "MW Test (p)": 0.0015,
         "Avg Trans Prob": 0.2236,
         "RMSE (v)": 0.162,
@@ -235,6 +248,7 @@
     },
     {
         "Model": "SIDM_RMSE_a",
+        "samples_count": 6,
         "MW Test (p)": 0.0,
         "Avg Trans Prob": 0.2237,
         "RMSE (v)": 0.169,
@@ -253,6 +267,7 @@
     },
     {
         "Model": "IDM_RMSE_v",
+        "samples_count": 1,
         "MW Test (p)": 0.1588,
         "Avg Trans Prob": 0.2713,
         "RMSE (v)": 0.208,
@@ -271,6 +286,7 @@
     },
     {
         "Model": "SIDM_RMSE_v",
+        "samples_count": 6,
         "MW Test (p)": 0.0545,
         "Avg Trans Prob": 0.2723,
         "RMSE (v)": 0.243,
@@ -289,6 +305,7 @@
     },
     {
         "Model": "SIDM_RMSE_s",
+        "samples_count": 6,
         "MW Test (p)": 0.0,
         "Avg Trans Prob": 0.2199,
         "RMSE (v)": 0.245,
@@ -307,6 +324,7 @@
     },
     {
         "Model": "IDM_RMSE_s",
+        "samples_count": 1,
         "MW Test (p)": 0.0156,
         "Avg Trans Prob": 0.2822,
         "RMSE (v)": 0.251,
