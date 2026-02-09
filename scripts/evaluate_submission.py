@@ -20,7 +20,6 @@ class OpenCFBenchmarkEvaluator:
 
         self.bins = self.ref_model['bins']
         self.trans_probs = self.ref_model['trans_probs']
-
         self.gt_probs = self._compute_trajectory_probs(self.gt_df, is_ground_truth=True)
 
     def _get_bin_indices(self, rel_v, spacing, foll_v):
@@ -46,7 +45,6 @@ class OpenCFBenchmarkEvaluator:
             f_speed = group[f_spd_col].values
             l_dist = group[l_dst_col].values
             f_dist = group[f_dst_col].values
-
             rel_v = l_speed - f_speed
             spacing = l_dist - f_dist
 
@@ -58,71 +56,48 @@ class OpenCFBenchmarkEvaluator:
             for t in range(len(rel_v) - 1):
                 curr = (int(idx_r[t]), int(idx_s[t]), int(idx_f[t]))
                 nxt = (int(idx_r[t + 1]), int(idx_s[t + 1]), int(idx_f[t + 1]))
-
                 if curr in self.trans_probs and nxt in self.trans_probs[curr]:
                     val = self.trans_probs[curr][nxt]
                     log_probs.append(np.log(val) if val > 0 else np.log(1e-9))
                 else:
                     log_probs.append(np.log(1e-9))
-
             if log_probs:
                 probs.append(np.exp(np.mean(log_probs)))
-
         return probs
 
     def validate_format(self, df, filename):
-        """Strictly validates the submission format before evaluation."""
-
-        # 1. Required Columns
         required_cols = {'CF_pair_id', 'Time', 'follower_dist', 'follower_speed', 'follower_acceleration'}
         missing = required_cols - set(df.columns)
         if missing:
             raise ValueError(f"❌ REJECTED {filename}: Missing columns: {missing}")
-
-        # 2. Check for NaN values in critical columns
         if df[list(required_cols)].isna().any().any():
-            raise ValueError(f"❌ REJECTED {filename}: Contains NaN (empty) values in required columns.")
-
-        # 3. Check Time format (Must contain prediction horizon)
-        # We expect at least SOME data >= 3.0s
+            raise ValueError(f"❌ REJECTED {filename}: Contains NaN values.")
         if not (df['Time'] >= 3.0).any():
-            raise ValueError(
-                f"❌ REJECTED {filename}: No prediction data found (Time >= 3.0s). Did you only submit the input history?")
-
-        # 4. Check Sample ID Limit (Max 6 samples: IDs 0-5)
+            raise ValueError(f"❌ REJECTED {filename}: No prediction data found (Time >= 3.0s).")
         if 'sample_id' in df.columns:
-            # Check if any ID is outside the allowed range [0, 5]
             if not df['sample_id'].between(0, 5).all():
                 max_id = df['sample_id'].max()
-                raise ValueError(
-                    f"❌ REJECTED {filename}: Invalid sample_id {max_id} found. Allowed IDs are 0 to 5 (Max 6 stochastic samples).")
-
+                raise ValueError(f"❌ REJECTED {filename}: Invalid sample_id {max_id}. Max allowed is 5.")
         return True
 
     def evaluate(self, submission_path):
         filename = os.path.basename(submission_path)
         try:
             sub_df = pd.read_csv(submission_path)
-        except Exception:
-            raise ValueError(f"❌ REJECTED {filename}: File is not a valid CSV.")
+        except:
+            raise ValueError(f"❌ REJECTED {filename}: Invalid CSV.")
 
-        # --- 1. VALIDATION ---
         self.validate_format(sub_df, filename)
 
-        # --- 2. PRE-PROCESSING ---
         if 'sample_id' not in sub_df.columns:
             sub_df['sample_id'] = 0
 
-        # Disregard extra stochastic samples (Keep 0-5)
         sub_df = sub_df[sub_df['sample_id'].between(0, 5)]
+        num_samples = sub_df['sample_id'].nunique()
 
-        # Filter for Prediction Horizon
         sub_df = sub_df[sub_df['Time'] >= 3.0]
+        if sub_df.empty: raise ValueError(f"❌ REJECTED {filename}: No data after filtering Time >= 3.0s.")
 
-        if sub_df.empty:
-            raise ValueError(f"❌ REJECTED {filename}: No valid data remains after filtering for Time >= 3.0s.")
-
-        # --- 3. MERGE & EVAL ---
         gt_subset = self.gt_df[['CF_pair_id', 'Time', 'leader_dist', 'leader_speed', 'follower_dist', 'follower_speed',
                                 'follower_acceleration']].copy()
         gt_subset.rename(columns={
@@ -132,19 +107,15 @@ class OpenCFBenchmarkEvaluator:
         }, inplace=True)
 
         eval_df = pd.merge(sub_df, gt_subset, on=['CF_pair_id', 'Time'], how='inner')
-        if eval_df.empty:
-            raise ValueError(f"❌ REJECTED {filename}: IDs do not match Ground Truth. Check your 'CF_pair_id'.")
+        if eval_df.empty: raise ValueError(f"❌ REJECTED {filename}: ID mismatch.")
 
-        # Metrics Calculation
         sub_probs = self._compute_trajectory_probs(eval_df, is_ground_truth=False)
         try:
             _, p_value = mannwhitneyu(self.gt_probs, sub_probs, alternative='two-sided')
         except:
             p_value = 0.0
-
         avg_trans_prob = np.mean(sub_probs) if sub_probs else 0.0
 
-        # One-Step
         t3_df = eval_df[(eval_df['Time'].round(1) == 3.0) & (eval_df['sample_id'] == 0)]
         if not t3_df.empty:
             rmse_v = np.sqrt(mean_squared_error(t3_df['follower_speed_gt'], t3_df['follower_speed']))
@@ -153,15 +124,12 @@ class OpenCFBenchmarkEvaluator:
         else:
             rmse_v, rmse_s, rmse_a = 0.0, 0.0, 0.0
 
-        # Open-Loop
         collisions, pairs = 0, 0
         ade_list, fde_list = [], []
-
         for pid, pair_data in eval_df.groupby('CF_pair_id'):
             pairs += 1
             pair_collided = False
             sample_ades, sample_fdes = [], []
-
             for _, sample_grp in pair_data.groupby('sample_id'):
                 sample_grp = sample_grp.sort_values('Time')
                 if np.any(sample_grp['follower_dist'] > sample_grp['leader_dist_gt']):
@@ -169,7 +137,6 @@ class OpenCFBenchmarkEvaluator:
                 diff = np.abs(sample_grp['follower_dist'] - sample_grp['follower_dist_gt'])
                 sample_ades.append(diff.mean())
                 sample_fdes.append(diff.iloc[-1])
-
             if pair_collided: collisions += 1
             if sample_ades:
                 ade_list.append(np.min(sample_ades))
@@ -177,6 +144,7 @@ class OpenCFBenchmarkEvaluator:
 
         return {
             "Model": filename.replace('.csv', ''),
+            "samples_count": int(num_samples),
             "MW Test (p)": float(f"{p_value:.4f}"),
             "Avg Trans Prob": float(f"{avg_trans_prob:.4f}"),
             "RMSE (v)": float(f"{rmse_v:.3f}"),
