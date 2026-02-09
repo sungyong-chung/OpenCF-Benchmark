@@ -102,7 +102,9 @@ def main():
             except Exception as e:
                 print(f"⚠️ FAILED {file_path}: {e}")
 
-        results.sort(key=lambda x: x.get('Avg Trans Prob', 0), reverse=True)
+        # Sort by proximity to Ground Truth (0.2572). Smallest difference is best.
+        GT_PROB = 0.2572
+        results.sort(key=lambda x: abs(x.get('Avg Trans Prob', 0) - GT_PROB))
 
         with open(OUTPUT_FILE, 'w') as f:
             json.dump(results, f, indent=4)
