@@ -214,12 +214,9 @@
         window.showModelInfo = function(index) {
             const row = tableData[index];
             const meta = row.meta || {};
-
-            // --- NEW: Populate Sample Count ---
-            const count = row.samples_count || 1; // Default to 1 if missing
-            const typeText = count > 1 ? "Stochastic (Multiple Samples)" : "Deterministic (Single Sample)";
-            document.getElementById('modalSamples').innerHTML = `<strong>${count} Sample(s) Submitted</strong> <br> <span class="text-muted" style="font-size: 0.9em;">${typeText}</span>`;
-
+            const count = row.samples_count || 1;
+            const typeText = count > 1 ? `Stochastic (${count} Samples)` : "Deterministic (Single Sample)";
+            document.getElementById('modalSamples').innerText = typeText;
             document.getElementById('modalTitle').innerText = row.Model;
             document.getElementById('modalDesc').innerText = meta.description || "No description provided.";
             document.getElementById('modalAssumptions').innerText = meta.assumptions || "No assumptions listed.";
