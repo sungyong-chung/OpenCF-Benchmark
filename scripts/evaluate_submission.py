@@ -116,13 +116,29 @@ class OpenCFBenchmarkEvaluator:
             p_value = 0.0
         avg_trans_prob = np.mean(sub_probs) if sub_probs else 0.0
 
-        t3_df = eval_df[(eval_df['Time'].round(1) == 3.0) & (eval_df['sample_id'] == 0)]
+        # --- UPDATED RMSE LOGIC START ---
+        # Filter for t=3.0s (All samples included)
+        t3_df = eval_df[eval_df['Time'].round(1) == 3.0]
+
         if not t3_df.empty:
-            rmse_v = np.sqrt(mean_squared_error(t3_df['follower_speed_gt'], t3_df['follower_speed']))
-            rmse_s = np.sqrt(mean_squared_error(t3_df['follower_dist_gt'], t3_df['follower_dist']))
-            rmse_a = np.sqrt(mean_squared_error(t3_df['follower_acceleration_gt'], t3_df['follower_acceleration']))
+            # Group by pair and Average across all sample_ids
+            # GT columns are constant per pair, so 'first' is sufficient.
+            t3_agg = t3_df.groupby('CF_pair_id').agg({
+                'follower_speed': 'mean',
+                'follower_dist': 'mean',
+                'follower_acceleration': 'mean',
+                'follower_speed_gt': 'first',
+                'follower_dist_gt': 'first',
+                'follower_acceleration_gt': 'first'
+            })
+
+            # Calculate RMSE using the Averaged Prediction
+            rmse_v = np.sqrt(mean_squared_error(t3_agg['follower_speed_gt'], t3_agg['follower_speed']))
+            rmse_s = np.sqrt(mean_squared_error(t3_agg['follower_dist_gt'], t3_agg['follower_dist']))
+            rmse_a = np.sqrt(mean_squared_error(t3_agg['follower_acceleration_gt'], t3_agg['follower_acceleration']))
         else:
             rmse_v, rmse_s, rmse_a = 0.0, 0.0, 0.0
+        # --- UPDATED RMSE LOGIC END ---
 
         collisions, pairs = 0, 0
         ade_list, fde_list = [], []
@@ -147,12 +163,12 @@ class OpenCFBenchmarkEvaluator:
             "samples_count": int(num_samples),
             "MW Test (p)": float(f"{p_value:.4f}"),
             "Avg Trans Prob": float(f"{avg_trans_prob:.4f}"),
-            "RMSE (v)": float(f"{rmse_v:.3f}"),
-            "RMSE (s)": float(f"{rmse_s:.3f}"),
-            "RMSE (a)": float(f"{rmse_a:.3f}"),
+            "RMSE (v)": float(f"{rmse_v:.4f}"),
+            "RMSE (s)": float(f"{rmse_s:.4f}"),
+            "RMSE (a)": float(f"{rmse_a:.4f}"),
             "Collision Rate (%)": float(f"{(collisions / pairs) * 100:.2f}") if pairs > 0 else 0.0,
-            "minADE": float(f"{np.mean(ade_list):.3f}") if ade_list else 0.0,
-            "minFDE": float(f"{np.mean(fde_list):.3f}") if fde_list else 0.0
+            "minADE": float(f"{np.mean(ade_list):.4}") if ade_list else 0.0,
+            "minFDE": float(f"{np.mean(fde_list):.4f}") if fde_list else 0.0
         }
 
 
