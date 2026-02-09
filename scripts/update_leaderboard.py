@@ -102,7 +102,7 @@ def main():
             except Exception as e:
                 print(f"⚠️ FAILED {file_path}: {e}")
 
-        results.sort(key=lambda x: x['RMSE (v)'])
+        results.sort(key=lambda x: x.get('Avg Trans Prob', 0), reverse=True)
 
         with open(OUTPUT_FILE, 'w') as f:
             json.dump(results, f, indent=4)
