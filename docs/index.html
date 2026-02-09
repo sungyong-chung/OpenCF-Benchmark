@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <style>
         :root {
@@ -17,181 +18,46 @@
             --text-dark: #333;
             --border-color: #ddd;
         }
-
-        body {
-            font-family: 'Source Sans Pro', sans-serif;
-            background-color: #f4f4f4;
-            color: var(--text-dark);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        header {
-            background-color: var(--uiuc-navy);
-            color: white;
-            padding: 1.5rem 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            z-index: 10;
-        }
-
-        .header-container {
-            width: 100%;
-            padding: 0 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .brand-text h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
-            font-size: 2rem;
-            margin: 0;
-        }
-
+        body { font-family: 'Source Sans Pro', sans-serif; background-color: #f4f4f4; color: var(--text-dark); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        header { background-color: var(--uiuc-navy); color: white; padding: 1.5rem 0; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 10; }
+        .header-container { width: 100%; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; }
+        .brand-text h1 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 2rem; margin: 0; }
         .brand-text span { color: var(--uiuc-orange); }
-
-        .nav-links a {
-            color: rgba(255,255,255,0.8);
-            text-decoration: none;
-            font-weight: 600;
-            margin-left: 1.5rem;
-            transition: color 0.2s;
-        }
+        .nav-links a { color: rgba(255,255,255,0.8); text-decoration: none; font-weight: 600; margin-left: 1.5rem; transition: color 0.2s; }
         .nav-links a:hover { color: var(--uiuc-orange); }
-
-        .main-container {
-            width: 100%;
-            padding: 1rem 1rem;
-            margin: 0;
-            flex: 1;
-        }
-
-        .card-custom {
-            background: white;
-            border-radius: 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border: none;
-            overflow: hidden;
-        }
-
-        .card-header-custom {
-            background: white;
-            padding: 1rem 1.5rem;
-            border-bottom: 2px solid #f0f0f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
+        .main-container { width: 100%; padding: 1rem 1rem; margin: 0; flex: 1; }
+        .card-custom { background: white; border-radius: 0; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border: none; overflow: hidden; }
+        .card-header-custom { background: white; padding: 1rem 1.5rem; border-bottom: 2px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; }
         .table-responsive { overflow-x: auto; }
-
-        .table {
-            margin-bottom: 0;
-            font-size: 0.85rem;
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-        }
-
+        .table { margin-bottom: 0; font-size: 0.85rem; width: 100%; border-collapse: separate; border-spacing: 0; }
         thead { background-color: #f8f9fa; }
-
-        .super-header {
-            text-align: center;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
-            font-size: 0.8rem;
-            color: white;
-            padding: 0.4rem !important;
-            border-bottom: none;
-        }
-
+        .super-header { text-align: center; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.8rem; color: white; padding: 0.4rem !important; border-bottom: none; }
         .bg-dynamics { background-color: #1E3A5F; }
         .bg-short { background-color: #E84A27; }
         .bg-long { background-color: #2D6A4F; }
-
-        th {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
-            color: var(--uiuc-navy);
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            padding: 0.8rem 0.4rem !important;
-            cursor: pointer;
-            white-space: nowrap;
-            border-bottom: 2px solid var(--border-color);
-            background-color: #f8f9fa;
-        }
-
+        th { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--uiuc-navy); text-transform: uppercase; font-size: 0.75rem; padding: 0.8rem 0.4rem !important; cursor: pointer; white-space: nowrap; border-bottom: 2px solid var(--border-color); background-color: #f8f9fa; }
         th:hover { background-color: #e9ecef; color: var(--uiuc-orange); }
-
         .border-right-thick { border-right: 2px solid #ccc !important; }
-
-        td {
-            padding: 0.6rem 0.4rem !important;
-            vertical-align: middle;
-            border-bottom: 1px solid #eee;
-            color: #444;
-            font-variant-numeric: tabular-nums;
-        }
-
+        td { padding: 0.6rem 0.4rem !important; vertical-align: middle; border-bottom: 1px solid #eee; color: #444; font-variant-numeric: tabular-nums; }
         td.rank-col { font-weight: 700; color: var(--uiuc-orange); text-align: center; white-space: nowrap; }
         td.model-col { font-weight: 600; color: var(--uiuc-navy); }
-
         .badge-pass { background-color: #d4edda; color: #155724; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
         .badge-fail { background-color: #f8d7da; color: #721c24; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
         .badge-new { background-color: #fff3cd; color: #856404; padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 0.7rem; margin-left: 5px; }
-
-        .best-score {
-            font-weight: 800;
-            color: var(--uiuc-navy);
-            text-decoration: underline;
-            text-decoration-color: var(--uiuc-orange);
-        }
-
-        .metrics-legend {
-            background: white;
-            padding: 2rem;
-            border-top: 1px solid #eee;
-        }
-
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .metric-group h4 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #eee;
-        }
-
+        .btn-info-custom { padding: 2px 8px; font-size: 0.8rem; border-radius: 50%; width: 25px; height: 25px; line-height: 20px; text-align: center; border: 1px solid #17a2b8; color: #17a2b8; background: white; transition: all 0.2s; cursor: pointer; }
+        .btn-info-custom:hover { background: #17a2b8; color: white; }
+        .best-score { font-weight: 800; color: var(--uiuc-navy); text-decoration: underline; text-decoration-color: var(--uiuc-orange); }
+        .metrics-legend { background: white; padding: 2rem; border-top: 1px solid #eee; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; max-width: 1400px; margin: 0 auto; }
+        .metric-group h4 { font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #eee; }
         .metric-group.dynamics h4 { color: #1E3A5F; border-color: #1E3A5F; }
         .metric-group.short h4 { color: #E84A27; border-color: #E84A27; }
         .metric-group.long h4 { color: #2D6A4F; border-color: #2D6A4F; }
-
         .metric-item { margin-bottom: 1rem; }
         .metric-item strong { display: block; color: var(--text-dark); font-size: 0.85rem; margin-bottom: 0.2rem; }
         .metric-item p { font-size: 0.8rem; color: #666; margin: 0; line-height: 1.4; }
         .metric-item a { color: var(--uiuc-orange); text-decoration: none; font-weight: 600; }
-
-        footer {
-            background: var(--uiuc-navy);
-            color: rgba(255,255,255,0.6);
-            text-align: center;
-            padding: 1.5rem;
-            font-size: 0.8rem;
-            margin-top: auto;
-        }
+        footer { background: var(--uiuc-navy); color: rgba(255,255,255,0.6); text-align: center; padding: 1.5rem; font-size: 0.8rem; margin-top: auto; }
     </style>
 </head>
 <body>
@@ -213,31 +79,58 @@
                 <h2>Leaderboard Standings <small style="font-size: 0.9rem; color: #888; margin-left: 10px;">(Showing Top 20 + New Entries)</small></h2>
                 <small class="text-muted">Last Updated: <span id="last-updated">...</span></small>
             </div>
-
             <div class="table-responsive">
                 <table class="table table-hover" id="leaderboardTable">
                     <thead>
                         <tr>
-                            <th colspan="2" style="background: white; border: none;"></th>
+                            <th colspan="3" style="background: white; border: none;"></th>
                             <th colspan="2" class="super-header bg-dynamics">Transition Probability Analysis</th>
                             <th colspan="3" class="super-header bg-short">One-Step Prediction (t=3.0s)</th>
                             <th colspan="3" class="super-header bg-long">Open-Loop Prediction (Full Horizon)</th>
                         </tr>
                         <tr>
                             <th class="text-center" onclick="sortTable(0)">Rank <i class="fas fa-sort"></i></th>
-                            <th class="border-right-thick" onclick="sortTable(1)">Model <i class="fas fa-sort"></i></th>
-                            <th onclick="sortTable(2)">Geometric Mean Prob<br><small>[%]</small> <i class="fas fa-sort"></i></th>
-                            <th class="border-right-thick" onclick="sortTable(3)">MW Test <br><small>(P-Value)</small> <i class="fas fa-sort"></i></th>
-                            <th onclick="sortTable(4)">RMSE (s) <br><small>[m]</small> <i class="fas fa-sort"></i></th>
-                            <th onclick="sortTable(5)">RMSE (v) <br><small>[m/s]</small> <i class="fas fa-sort"></i></th>
-                            <th class="border-right-thick" onclick="sortTable(6)">RMSE (a) <br><small>[m/s²]</small> <i class="fas fa-sort"></i></th>
-                            <th onclick="sortTable(7)">Collision <br><small>[%]</small> <i class="fas fa-sort"></i></th>
-                            <th onclick="sortTable(8)">minADE <br><small>[m]</small> <i class="fas fa-sort"></i></th>
-                            <th onclick="sortTable(9)">minFDE <br><small>[m]</small> <i class="fas fa-sort"></i></th>
+                            <th class="" onclick="sortTable(1)">Model <i class="fas fa-sort"></i></th>
+                            <th class="border-right-thick text-center">Info</th> <th onclick="sortTable(3)">Geometric Mean Prob<br><small>[%]</small> <i class="fas fa-sort"></i></th>
+                            <th class="border-right-thick" onclick="sortTable(4)">MW Test <br><small>(P-Value)</small> <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable(5)">RMSE (s) <br><small>[m]</small> <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable(6)">RMSE (v) <br><small>[m/s]</small> <i class="fas fa-sort"></i></th>
+                            <th class="border-right-thick" onclick="sortTable(7)">RMSE (a) <br><small>[m/s²]</small> <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable(8)">Collision <br><small>[%]</small> <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable(9)">minADE <br><small>[m]</small> <i class="fas fa-sort"></i></th>
+                            <th onclick="sortTable(10)">minFDE <br><small>[m]</small> <i class="fas fa-sort"></i></th>
                         </tr>
                     </thead>
                     <tbody id="table-body"></tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modelModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: var(--uiuc-navy); color: white;">
+                    <h5 class="modal-title" id="modalTitle">Model Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <h6 style="color: var(--uiuc-orange); font-weight: 700;">Description</h6>
+                        <p id="modalDesc">...</p>
+                    </div>
+                    <div class="mb-3">
+                        <h6 style="color: var(--uiuc-orange); font-weight: 700;">Assumptions</h6>
+                        <p id="modalAssumptions">...</p>
+                    </div>
+                    <div class="mb-3">
+                        <h6 style="color: var(--uiuc-orange); font-weight: 700;">Calibration Process</h6>
+                        <p id="modalCalibration">...</p>
+                    </div>
+                    <div id="modalLinkContainer">
+                        <a href="#" id="modalLink" target="_blank" class="btn btn-outline-dark btn-sm"><i class="fas fa-external-link-alt"></i> View Paper / Code</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -263,8 +156,8 @@
             <div class="metric-group short">
                 <h4>One-Step Prediction (Short-term)</h4>
                 <div class="metric-item">
-                    <strong>RMSE (s, v, a)</strong>
-                    <p>Root Mean Square Error for Spacing, Speed, and Acceleration at t=3.0s.</p>
+                    <strong>RMSE (v, s, a)</strong>
+                    <p>Root Mean Square Error for Speed, Spacing, and Acceleration at t=3.0s.</p>
                 </div>
             </div>
             <div class="metric-group long">
@@ -277,20 +170,14 @@
         </div>
     </section>
 
-    <footer>
-        &copy; 2026 OpenCF Benchmark &bull; Powered by GitHub Actions
-    </footer>
+    <footer>&copy; 2026 OpenCF Benchmark &bull; Powered by GitHub Actions</footer>
 
     <script>
-        // CONFIG
-        const GT_GMP_VALUE = 0.2572; // Hardcoded GT Value
-
-        // Column Definitions
-        // order: 'asc' means Lowest is Best. 'desc' means Highest is Best.
-        // 'deviation' means Closest to GT is Best.
+        const GT_GMP_VALUE = 0.2572;
         const columns = [
             { key: 'rank', type: 'number', order: 'asc' },
             { key: 'Model', type: 'string', order: 'asc' },
+            { key: 'info', type: 'none' }, // Info column (unsortable)
             { key: 'Avg Trans Prob', type: 'number', order: 'deviation' },
             { key: 'MW Test (p)', type: 'number', order: 'desc' },
             { key: 'RMSE (s)', type: 'number', order: 'asc' },
@@ -302,66 +189,74 @@
         ];
 
         let tableData = [];
-        let sortColIndex = 5; // Default to RMSE(v)
-        let sortAscending = true; // Default to 'Low is good'
+        let sortColIndex = 6; // Default to RMSE(v)
+        let sortAscending = true;
+        let modelModal;
 
         async function init() {
             try {
                 const resData = await fetch('leaderboard_data.json?t=' + Date.now());
                 if (resData.ok) tableData = await resData.json();
-
                 document.getElementById('last-updated').innerText = new Date().toLocaleDateString();
+
+                // Initialize Modal
+                modelModal = new bootstrap.Modal(document.getElementById('modelModal'));
+
                 renderTable();
-            } catch (error) {
-                console.error(error);
-            }
+            } catch (error) { console.error(error); }
         }
 
-        function formatNumber(num) {
-            if (typeof num !== 'number') return '-';
-            return num.toFixed(4);
+        function formatNumber(num) { return (typeof num !== 'number') ? '-' : num.toFixed(4); }
+
+        // --- NEW: Function to open Modal ---
+        window.showModelInfo = function(index) {
+            const row = tableData[index];
+            const meta = row.meta || {};
+
+            document.getElementById('modalTitle').innerText = row.Model;
+            document.getElementById('modalDesc').innerText = meta.description || "No description provided.";
+            document.getElementById('modalAssumptions').innerText = meta.assumptions || "No assumptions listed.";
+            document.getElementById('modalCalibration').innerText = meta.calibration || "No calibration details provided.";
+
+            const linkBtn = document.getElementById('modalLink');
+            const linkCont = document.getElementById('modalLinkContainer');
+            if (meta.paper_link) {
+                linkBtn.href = meta.paper_link;
+                linkCont.style.display = 'block';
+            } else {
+                linkCont.style.display = 'none';
+            }
+
+            modelModal.show();
         }
 
         function renderTable() {
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
 
-            // 1. Sort Data
+            // Sort (Same logic as before)
             tableData.sort((a, b) => {
+                if (columns[sortColIndex].type === 'none') return 0;
                 const col = columns[sortColIndex];
                 const key = col.key;
                 const valA = a[key] !== undefined ? a[key] : -999;
                 const valB = b[key] !== undefined ? b[key] : -999;
-
-                // String Sort
-                if (col.type === 'string') {
-                    return sortAscending ? valA.localeCompare(valB) : valB.localeCompare(valA);
-                }
-
-                // Special Sort: Deviation from GT (Closer is better)
+                if (col.type === 'string') return sortAscending ? valA.localeCompare(valB) : valB.localeCompare(valA);
                 if (col.order === 'deviation') {
                     const diffA = Math.abs(valA - GT_GMP_VALUE);
                     const diffB = Math.abs(valB - GT_GMP_VALUE);
-                    // Ascending here means "Smallest Difference" (which is what we always want for 'best')
-                    // If sortAscending is false, we invert it to show Worst first.
                     return sortAscending ? diffA - diffB : diffB - diffA;
                 }
-
-                // Standard Numeric Sort
                 return sortAscending ? valA - valB : valB - valA;
             });
 
-            // 2. Identify "Best" values
+            // Calculate Best (Same logic)
             const bestScores = {};
             columns.forEach(col => {
                 if (col.type === 'number' && col.key !== 'rank') {
                     const values = tableData.map(row => row[col.key] !== undefined ? row[col.key] : null).filter(v => v !== null);
-
                     if (col.order === 'deviation') {
-                        // Find value with minimum difference from GT
-                        bestScores[col.key] = values.reduce((prev, curr) => {
-                            return (Math.abs(curr - GT_GMP_VALUE) < Math.abs(prev - GT_GMP_VALUE) ? curr : prev);
-                        });
+                        bestScores[col.key] = values.reduce((prev, curr) => (Math.abs(curr - GT_GMP_VALUE) < Math.abs(prev - GT_GMP_VALUE) ? curr : prev));
                     } else if (col.order === 'asc') {
                         bestScores[col.key] = Math.min(...values);
                     } else {
@@ -370,11 +265,14 @@
                 }
             });
 
-            // 3. Render Top 20 + New
             const ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
             const now = new Date();
 
             tableData.forEach((row, index) => {
+                // Find original index in unsorted data for the onclick handler,
+                // OR just pass the object. Actually, passing the current index in tableData is fine
+                // because tableData is now sorted.
+
                 const rank = index + 1;
                 const rowDate = row.Date ? new Date(row.Date) : new Date('2000-01-01');
                 const isNew = (now - rowDate) < ONE_WEEK;
@@ -382,19 +280,14 @@
 
                 if (isTop20 || isNew) {
                     const tr = document.createElement('tr');
-
                     const pVal = row['MW Test (p)'] || 0;
                     const pBadge = `<span class="${pVal > 0.05 ? 'badge-pass' : 'badge-fail'}">${formatNumber(pVal)}</span>`;
 
                     let modelName = row['Model'];
                     if (isNew) modelName += ` <span class="badge-new">NEW</span>`;
-
                     const avgProb = row['Avg Trans Prob'] || 0;
-
-                    // Helper to check if value matches Best
                     const isBest = (key, val) => val === bestScores[key] ? 'best-score' : '';
 
-                    // --- MEDAL LOGIC ---
                     let rankDisplay = `#${rank}`;
                     if (rank === 1) rankDisplay = `<i class="fas fa-medal" style="color: #FFD700;"></i> #${rank}`;
                     else if (rank === 2) rankDisplay = `<i class="fas fa-medal" style="color: #C0C0C0;"></i> #${rank}`;
@@ -402,15 +295,18 @@
 
                     tr.innerHTML = `
                         <td class="rank-col">${rankDisplay}</td>
-                        <td class="model-col border-right-thick">${modelName}</td>
+                        <td class="model-col">${modelName}</td>
+                        <td class="border-right-thick text-center">
+                            <button class="btn-info-custom" onclick="showModelInfo(${index})">
+                                <i class="fas fa-info"></i>
+                            </button>
+                        </td>
 
                         <td class="${isBest('Avg Trans Prob', avgProb)}">${formatNumber(avgProb)}</td>
                         <td class="border-right-thick">${pBadge}</td>
-
                         <td class="${isBest('RMSE (s)', row['RMSE (s)'])}">${formatNumber(row['RMSE (s)'])}</td>
                         <td class="${isBest('RMSE (v)', row['RMSE (v)'])}">${formatNumber(row['RMSE (v)'])}</td>
                         <td class="border-right-thick ${isBest('RMSE (a)', row['RMSE (a)'])}">${formatNumber(row['RMSE (a)'])}</td>
-
                         <td class="${isBest('Collision Rate (%)', row['Collision Rate (%)'])}">${formatNumber(row['Collision Rate (%)'])}</td>
                         <td class="${isBest('minADE', row['minADE'])}">${formatNumber(row['minADE'])}</td>
                         <td class="${isBest('minFDE', row['minFDE'])}">${formatNumber(row['minFDE'])}</td>
@@ -419,22 +315,20 @@
                 }
             });
         }
-
         function sortTable(columnIndex) {
-            if (sortColIndex === columnIndex) {
-                sortAscending = !sortAscending;
-            } else {
-                sortColIndex = columnIndex;
-                sortAscending = columns[columnIndex].order !== 'desc';
-            }
+            if (sortColIndex === columnIndex) { sortAscending = !sortAscending; }
+            else { sortColIndex = columnIndex; sortAscending = columns[columnIndex].order !== 'desc'; }
             renderTable();
             updateHeaderIcons();
         }
-
         function updateHeaderIcons() {
-            const headers = document.querySelectorAll('th i');
+            const headers = document.querySelectorAll('th i.fa-sort, th i.fa-sort-up, th i.fa-sort-down');
             headers.forEach((icon, index) => {
                 icon.className = 'fas fa-sort';
+                // Adjust index because we added an unsortable 'info' column at index 2
+                // Visual Index: Rank(0), Model(1), Info(2), GMP(3)...
+                // Columns Array: Rank(0), Model(1), Info(2), GMP(3)...
+                // Matches perfectly.
                 if (index === sortColIndex) {
                     icon.className = sortAscending ? 'fas fa-sort-up' : 'fas fa-sort-down';
                     icon.style.opacity = '1';
@@ -442,7 +336,6 @@
                 }
             });
         }
-
         init();
     </script>
 </body>

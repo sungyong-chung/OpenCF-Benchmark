@@ -19,11 +19,9 @@ ZIP_PATH = os.path.join(BENCHMARK_DIR, ZIP_FILENAME)
 def ensure_ground_truth_exists():
     if os.path.exists(GT_PATH):
         return True, False
-
     if not os.path.exists(ZIP_PATH):
         print(f"❌ Error: Could not find {GT_FILENAME} or {ZIP_FILENAME}.")
         return False, False
-
     print(f"🔒 Ground Truth is locked. Attempting to extract from {ZIP_FILENAME}...")
     password = os.environ.get('GT_PASSWORD')
     if not password:
@@ -31,7 +29,6 @@ def ensure_ground_truth_exists():
             password = getpass.getpass(prompt='Enter GT_PASSWORD: ')
         except:
             return False, False
-
     try:
         with zipfile.ZipFile(ZIP_PATH, 'r') as zf:
             zf.extractall(path=BENCHMARK_DIR, pwd=bytes(password, 'utf-8'))
@@ -75,13 +72,32 @@ def main():
             try:
                 res = evaluator.evaluate(file_path)
 
-                # Assign Date
+                # 1. Assign Date
                 model_name = res['Model']
                 if model_name in model_dates:
                     res['Date'] = model_dates[model_name]
                 else:
                     res['Date'] = datetime.now().strftime('%Y-%m-%d')
 
+                # 2. Load Metadata (JSON) if it exists
+                json_path = file_path.replace('.csv', '.json')
+                meta = {
+                    "description": "No description provided.",
+                    "calibration": "No calibration details provided.",
+                    "assumptions": "No assumptions provided.",
+                    "paper_link": ""
+                }
+
+                if os.path.exists(json_path):
+                    try:
+                        with open(json_path, 'r') as jf:
+                            user_meta = json.load(jf)
+                            # Merge safely
+                            meta.update({k: v for k, v in user_meta.items() if v})
+                    except Exception as e:
+                        print(f"⚠️ Error reading JSON for {model_name}: {e}")
+
+                res['meta'] = meta
                 results.append(res)
             except Exception as e:
                 print(f"⚠️ FAILED {file_path}: {e}")

@@ -1,0 +1,6 @@
+{
+    "description": "Gipps' Model",
+    "assumptions": "",
+    "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Acceleration (a). Parameters calibrated: amaxn (max accel), bn (decel), taun (reaction time), thetan (variability), s0n (min spacing), Vmaxn (max speed), bhat (estimated leader decel).",
+    "paper_link": ""
+}

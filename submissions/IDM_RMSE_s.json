@@ -1,0 +1,6 @@
+{
+    "description": "Intelligent Driver Model (IDM)",
+    "assumptions": "",
+    "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Spacing (s). Parameters calibrated: v0 (desired speed), T (time headway), a_max (max accel), b (comfortable decel), s0 (min gap), delta (exponent).",
+    "paper_link": ""
+}

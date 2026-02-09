@@ -59,7 +59,20 @@ We use an automated **"Evaluation-as-a-Service"** workflow. You do not need to r
     * *Naming convention: `ModelName_Variant.csv` (e.g., `MyModel_LSTM.csv`).*
 3.  Open a **Pull Request (PR)** to the `main` branch of this repository.
 
-### 3. Automated Evaluation
+### 3. (Optional) Submit Model Metadata
+To display details about your model on the leaderboard (Description, Calibration, Papers), submit a JSON file with the **same filename** as your CSV.
+
+*Example: `submissions/MyModel_LSTM.json`*
+```json
+{
+    "description": "A brief description of your model.",
+    "assumptions": "List key assumptions (e.g., constant reaction time).",
+    "calibration": "Details on how it was calibrated.",
+    "paper_link": "[https://arxiv.org/abs/](https://arxiv.org/abs/)..."
+}
+```
+
+### 4. Automated Evaluation
 * Once your PR is opened, our **Automated Judge** (GitHub Actions) will run immediately.
 * It will evaluate your submission against the hidden Ground Truth.
 * **Check the PR comments:** The bot will post your scores (RMSE, Collision Rate, etc.) and Pass/Fail status.

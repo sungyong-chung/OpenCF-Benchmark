@@ -1,0 +1,6 @@
+{
+    "description": "Full Velocity Difference Model (Sigmoid Variant)",
+    "assumptions": "",
+    "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Acceleration (a). Parameters calibrated: K1n (spacing gain), K2n (speed diff gain), s0n (min spacing), Tn (time headway), Vmaxn (max speed).",
+    "paper_link": ""
+}

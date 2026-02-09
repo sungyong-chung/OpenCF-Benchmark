@@ -1,0 +1,6 @@
+{
+    "description": "Stochastic Intelligent Driver Model (SIDM)",
+    "assumptions": "",
+    "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Spacing (s). Parameters calibrated: v0, T, a_max, b, s0, delta, sigma (noise std dev).",
+    "paper_link": ""
+}

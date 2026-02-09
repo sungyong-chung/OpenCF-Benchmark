@@ -1,0 +1,6 @@
+{
+    "description": "Van Arem Car-Following Model",
+    "assumptions": "",
+    "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Speed (v). Parameters calibrated: ka, kv, kd, t_system (time gap), v_int (intended speed), r_min, d_p, k, d.",
+    "paper_link": ""
+}
