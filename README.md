@@ -56,13 +56,13 @@ We use an automated **"Evaluation-as-a-Service"** workflow. You do not need to r
 ### 2. Submit Your Results
 1.  **Fork** this repository.
 2.  Place your results CSV file into the `submissions/` folder.
-    * *Naming convention: `ModelName_Variant.csv` (e.g., `MyModel_LSTM.csv`).*
+    * *Naming convention: `ModelName.csv`.*
 3.  Open a **Pull Request (PR)** to the `main` branch of this repository.
 
 ### 3. (Optional) Submit Model Metadata
 To display details about your model on the leaderboard (Description, Calibration, Papers), submit a JSON file with the **same filename** as your CSV.
 
-*Example: `submissions/MyModel_LSTM.json`*
+*Format: `submissions/MyModel.json`*
 ```json
 {
     "description": "A brief description of your model.",
@@ -90,7 +90,7 @@ We compare the **Geometric Mean Transition Probability** of your generated traje
 * **FAIL:** p-value < 0.05.
 
 ### 2. One-Step Prediction (Short-term)
-Measures accuracy at exactly `t = 3.0s` (the first predicted step).
+Measures accuracy at exactly `t = 3.0s` (the first predicted step). We calculate the average state (spacing, speed, and acceleration) across all submitted samples (K) before computing the error.
 * **RMSE (s):** Root Mean Square Error of Spacing.
 * **RMSE (v):** Root Mean Square Error of Speed.
 * **RMSE (a):** Root Mean Square Error of Acceleration.
@@ -98,7 +98,7 @@ Measures accuracy at exactly `t = 3.0s` (the first predicted step).
 ### 3. Open-Loop Prediction (Long-term)
 Measures consistency over the full trajectory horizon.
 * **minADE:** Minimum Average Displacement Error (over K samples).
-* **minFDE:** Minimum Final Displacement Error (at the last timestep).
+* **minFDE:** Minimum Final Displacement Error (at the last timestep over K samples).
 * **Collision Rate:** Percentage of test pairs where the follower collides with the leader (`follower_dist > leader_dist`).
 
 ---
