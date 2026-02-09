@@ -79,8 +79,8 @@
 
         .card-custom {
             background: white;
-            border-radius: 8px; /* Slightly rounded corners for fancy look */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); /* Softer, deeper shadow */
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             border: none;
             overflow: hidden;
             margin-bottom: 2rem;
@@ -101,7 +101,7 @@
 
         .table {
             margin-bottom: 0;
-            font-size: 0.9rem; /* Slightly larger for readability */
+            font-size: 0.9rem;
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
@@ -111,34 +111,34 @@
         .super-header {
             text-align: center;
             font-family: 'Montserrat', sans-serif;
-            font-weight: 800; /* Extra bold */
+            font-weight: 800;
             font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 1px; /* Spaced out letters */
+            letter-spacing: 1px;
             padding: 1rem 0.5rem !important;
             background-color: white !important;
             border-bottom: 2px solid var(--border-color) !important;
-            border-top: none !important; /* Explicitly removed top line */
+            border-top: none !important;
         }
 
-        .text-dynamics { color: #1E3A5F; } /* Navy */
-        .text-short { color: #E84A27; }    /* Orange */
-        .text-long { color: #2D6A4F; }     /* Green */
+        .text-dynamics { color: #1E3A5F; }
+        .text-short { color: #E84A27; }
+        .text-long { color: #2D6A4F; }
 
         /* --- Column Headers --- */
         thead tr:last-child th {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
-            color: #6c757d; /* Muted gray for sub-headers */
+            color: #6c757d;
             text-transform: uppercase;
             font-size: 0.7rem;
             padding: 1rem 0.5rem !important;
             cursor: pointer;
             white-space: nowrap;
             border-bottom: 1px solid var(--border-color);
-            background-color: #fafafa; /* Very light gray bg */
+            background-color: #fafafa;
             vertical-align: middle;
-            text-align: center !important; /* Force Center */
+            text-align: center !important;
             transition: color 0.2s, background-color 0.2s;
         }
 
@@ -154,15 +154,14 @@
 
         /* --- Table Body --- */
         td {
-            padding: 1rem 0.5rem !important; /* More breathing room */
+            padding: 1rem 0.5rem !important;
             vertical-align: middle;
             border-bottom: 1px solid #f0f0f0;
             color: #444;
             font-variant-numeric: tabular-nums;
-            text-align: center; /* Force numbers to center */
+            text-align: center;
         }
 
-        /* Keep Model name left-aligned */
         td.model-col {
             font-weight: 600;
             color: var(--uiuc-navy);
@@ -177,13 +176,12 @@
         }
 
         .border-right-thick {
-            border-right: 1px solid #ddd !important; /* Thinner, cleaner divider */
+            border-right: 1px solid #ddd !important;
         }
 
-        /* Active Sort State */
         th.active-sort {
             color: var(--uiuc-orange) !important;
-            background-color: #fff8f5 !important; /* Subtle orange tint */
+            background-color: #fff8f5 !important;
             border-bottom: 2px solid var(--uiuc-orange);
         }
 
@@ -222,13 +220,13 @@
         .best-score {
             font-weight: 800;
             color: var(--uiuc-navy);
-            border-bottom: 2px solid var(--uiuc-orange); /* Cleaner underline */
+            border-bottom: 2px solid var(--uiuc-orange);
         }
 
-        /* --- Legend --- */
+        /* --- Legend & Footer --- */
         .metrics-legend {
             background: white;
-            padding: 3rem 2rem;
+            padding: 3rem 1rem; /* Matched to main container padding */
             border-top: 1px solid #eee;
         }
 
@@ -236,8 +234,9 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 3rem;
-            max-width: 1200px;
-            margin: 0 auto;
+            width: 100%; /* CHANGED: Full width to match table */
+            max-width: 100%; /* CHANGED: Removed 1200px limit */
+            margin: 0;
         }
 
         .metric-group h4 {
@@ -299,7 +298,7 @@
                     <th class="text-center" onclick="sortTable(0)">Rank</th>
                     <th class="" onclick="sortTable(1)">Model</th>
                     <th class="border-right-thick text-center">Info</th>
-                    <th onclick="sortTable(3)">Geometric Mean Prob<br><small style="font-weight: 400; opacity: 0.7;">[%]</small></th>
+                    <th onclick="sortTable(3)" style="width: 13%;">Geometric Mean Prob<br><small style="font-weight: 400; opacity: 0.7;">[%]</small></th>
                     <th class="border-right-thick" onclick="sortTable(4)">MW Test <br><small style="font-weight: 400; opacity: 0.7;">(P-Value)</small></th>
                     <th onclick="sortTable(5)">RMSE (s) <br><small style="font-weight: 400; opacity: 0.7;">[m]</small></th>
                     <th onclick="sortTable(6)">RMSE (v) <br><small style="font-weight: 400; opacity: 0.7;">[m/s]</small></th>
@@ -316,7 +315,7 @@
 </div>
 
 <div class="modal fade" id="modelModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header" style="background-color: var(--uiuc-navy); color: white;">
                 <h5 class="modal-title" id="modalTitle">Model Details</h5>
@@ -386,7 +385,6 @@
 
 <script>
     const GT_GMP_VALUE = 0.2572;
-    // Columns config
     const columns = [
         {key: 'rank', type: 'number', order: 'asc'},
         {key: 'Model', type: 'none', order: 'asc'},
