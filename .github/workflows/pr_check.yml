@@ -25,7 +25,7 @@ jobs:
       # 3. Unzip the Ground Truth using the Secret Key
       - name: Decrypt Ground Truth
         run: |
-          unzip -P "${{ secrets.GT_PASSWORD }}" benchmark_data/ground_truth.zip -d benchmark_data/
+          unzip -P "${{ secrets.GT_PASSWORD }}" benchmark_data/test_ground_truth.zip -d benchmark_data/
           # Verify it exists
           ls -l benchmark_data/test_ground_truth.csv
 
