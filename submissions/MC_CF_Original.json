@@ -1,6 +1,0 @@
-{
-    "description": "Proposed by Sungyong Chung, Yanlin Zhang, Nachuan Li, Dana Monzer, and Alireza Talebpour, this model introduces a new paradigm of data-driven car-following. It models driving as a Markov process, predicting behavior by randomly sampling accelerations from empirical distributions within discretized state bins.",
-    "assumptions": "Markovian assumption: Future acceleration depends only on the current state cluster defined by relative speed, spacing, and follower speed.",
-    "calibration": "Calibration-free. It empirically derives state transitions and acceleration distributions directly from the OpenCF Training Set.",
-    "paper_link": ""
-}

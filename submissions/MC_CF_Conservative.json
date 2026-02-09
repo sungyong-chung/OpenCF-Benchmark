@@ -1,6 +1,0 @@
-{
-    "description": "Proposed by Sungyong Chung, Yanlin Zhang, Nachuan Li, Dana Monzer, and Alireza Talebpour, this is a safety-enhanced variant of the MC-CF paradigm. It incorporates Time-To-Collision (TTC) thresholds to bias acceleration sampling towards lower percentiles in critical scenarios, ensuring safer trajectory generation.",
-    "assumptions": "Markovian dynamics with probabilistic safety constraints: assumes drivers adopt conservative accelerations (bottom 5-30%) when TTC is below critical thresholds (3s/10s).",
-    "calibration": "Calibration-free. It empirically derives state transitions and acceleration distributions directly from the OpenCF Training Set.",
-    "paper_link": ""
-}
