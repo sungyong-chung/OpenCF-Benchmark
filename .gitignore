@@ -10,6 +10,8 @@ __pycache__/
 
 # Ignore the preparation script
 scripts/00_prepare_benchmark_data.py
+scripts/04_train_mccf.py
+scripts/05_generate_mccf_submission.py
 
 # Don't show the ground truth
 benchmark_data/test_ground_truth.csv
@@ -17,6 +19,8 @@ baselines/submissions/
 
 # Provide training set from Google Drive.
 benchmark_data/train.csv
+
+benchmark_data/models/
 
 # Ignore local IDE settings
 .idea/
