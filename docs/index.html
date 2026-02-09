@@ -58,6 +58,9 @@
         .metric-item p { font-size: 0.8rem; color: #666; margin: 0; line-height: 1.4; }
         .metric-item a { color: var(--uiuc-orange); text-decoration: none; font-weight: 600; }
         footer { background: var(--uiuc-navy); color: rgba(255,255,255,0.6); text-align: center; padding: 1.5rem; font-size: 0.8rem; margin-top: auto; }
+
+        /* New Style to indicate sorting is active/clickable */
+        th.active-sort { color: var(--uiuc-orange) !important; }
     </style>
 </head>
 <body>
@@ -89,16 +92,16 @@
                             <th colspan="3" class="super-header bg-long">Open-Loop Prediction (Full Horizon)</th>
                         </tr>
                         <tr>
-                            <th class="text-center" onclick="sortTable(0)">Rank <i class="fas fa-sort"></i></th>
-                            <th class="" onclick="sortTable(1)">Model <i class="fas fa-sort"></i></th>
-                            <th class="border-right-thick text-center">Info</th> <th onclick="sortTable(3)">Geometric Mean Prob<br><small>[%]</small> <i class="fas fa-sort"></i></th>
-                            <th class="border-right-thick" onclick="sortTable(4)">MW Test <br><small>(P-Value)</small> <i class="fas fa-sort"></i></th>
-                            <th onclick="sortTable(5)">RMSE (s) <br><small>[m]</small> <i class="fas fa-sort"></i></th>
-                            <th onclick="sortTable(6)">RMSE (v) <br><small>[m/s]</small> <i class="fas fa-sort"></i></th>
-                            <th class="border-right-thick" onclick="sortTable(7)">RMSE (a) <br><small>[m/s²]</small> <i class="fas fa-sort"></i></th>
-                            <th onclick="sortTable(8)">Collision <br><small>[%]</small> <i class="fas fa-sort"></i></th>
-                            <th onclick="sortTable(9)">minADE <br><small>[m]</small> <i class="fas fa-sort"></i></th>
-                            <th onclick="sortTable(10)">minFDE <br><small>[m]</small> <i class="fas fa-sort"></i></th>
+                            <th class="text-center" onclick="sortTable(0)">Rank</th>
+                            <th class="" onclick="sortTable(1)">Model</th>
+                            <th class="border-right-thick text-center">Info</th> <th onclick="sortTable(3)">Geometric Mean Prob<br><small>[%]</small></th>
+                            <th class="border-right-thick" onclick="sortTable(4)">MW Test <br><small>(P-Value)</small></th>
+                            <th onclick="sortTable(5)">RMSE (s) <br><small>[m]</small></th>
+                            <th onclick="sortTable(6)">RMSE (v) <br><small>[m/s]</small></th>
+                            <th class="border-right-thick" onclick="sortTable(7)">RMSE (a) <br><small>[m/s²]</small></th>
+                            <th onclick="sortTable(8)">Collision <br><small>[%]</small></th>
+                            <th onclick="sortTable(9)">minADE <br><small>[m]</small></th>
+                            <th onclick="sortTable(10)">minFDE <br><small>[m]</small></th>
                         </tr>
                     </thead>
                     <tbody id="table-body"></tbody>
@@ -178,9 +181,9 @@
             { key: 'rank', type: 'number', order: 'asc' },
             { key: 'Model', type: 'string', order: 'asc' },
             { key: 'info', type: 'none' }, // Info column (unsortable)
-            { key: 'Avg Trans Prob', type: 'number', order: 'deviation' },
-            { key: 'MW Test (p)', type: 'number', order: 'desc' },
-            { key: 'RMSE (s)', type: 'number', order: 'asc' },
+            { key: 'Avg Trans Prob', type: 'number', order: 'deviation' }, // Deviation (closer to GT is better)
+            { key: 'MW Test (p)', type: 'number', order: 'desc' }, // Descending (Higher is better)
+            { key: 'RMSE (s)', type: 'number', order: 'asc' }, // Ascending (Lower is better)
             { key: 'RMSE (v)', type: 'number', order: 'asc' },
             { key: 'RMSE (a)', type: 'number', order: 'asc' },
             { key: 'Collision Rate (%)', type: 'number', order: 'asc' },
@@ -190,8 +193,8 @@
 
         let tableData = [];
         let sortColIndex = 6; // Default to RMSE(v)
-        let sortAscending = true;
-        let modelModal;
+        // We no longer toggle 'sortAscending' because we want to lock the direction.
+        // We will just derive the correct direction from the 'columns' config.
 
         async function init() {
             try {
@@ -199,17 +202,18 @@
                 if (resData.ok) tableData = await resData.json();
                 document.getElementById('last-updated').innerText = new Date().toLocaleDateString();
 
-                // Initialize Modal
                 modelModal = new bootstrap.Modal(document.getElementById('modelModal'));
 
                 renderTable();
+                updateHeaderStyles();
             } catch (error) { console.error(error); }
         }
 
         function formatNumber(num) { return (typeof num !== 'number') ? '-' : num.toFixed(4); }
 
-        // --- NEW: Function to open Modal ---
         window.showModelInfo = function(index) {
+            // Find the correct row data even after sorting
+            // We pass the index relative to the sorted 'tableData' array
             const row = tableData[index];
             const meta = row.meta || {};
 
@@ -226,7 +230,6 @@
             } else {
                 linkCont.style.display = 'none';
             }
-
             modelModal.show();
         }
 
@@ -234,33 +237,48 @@
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
 
-            // Sort (Same logic as before)
+            // Determine sorting rules based on current column index
+            const colConfig = columns[sortColIndex];
+
             tableData.sort((a, b) => {
-                if (columns[sortColIndex].type === 'none') return 0;
-                const col = columns[sortColIndex];
-                const key = col.key;
+                if (colConfig.type === 'none') return 0;
+
+                const key = colConfig.key;
                 const valA = a[key] !== undefined ? a[key] : -999;
                 const valB = b[key] !== undefined ? b[key] : -999;
-                if (col.type === 'string') return sortAscending ? valA.localeCompare(valB) : valB.localeCompare(valA);
-                if (col.order === 'deviation') {
+
+                if (colConfig.type === 'string') {
+                    // Strings (Model Name) always Ascending (A-Z)
+                    return valA.localeCompare(valB);
+                }
+
+                if (colConfig.order === 'deviation') {
+                    // Deviation: Smaller difference is better (Always Ascending Difference)
                     const diffA = Math.abs(valA - GT_GMP_VALUE);
                     const diffB = Math.abs(valB - GT_GMP_VALUE);
-                    return sortAscending ? diffA - diffB : diffB - diffA;
+                    return diffA - diffB;
                 }
-                return sortAscending ? valA - valB : valB - valA;
+
+                if (colConfig.order === 'desc') {
+                    // Descending: Higher is better (P-Value)
+                    return valB - valA;
+                }
+
+                // Default Ascending: Lower is better (RMSE, ADE, etc.)
+                return valA - valB;
             });
 
-            // Calculate Best (Same logic)
+            // Calculate Best Scores for Highlighting
             const bestScores = {};
             columns.forEach(col => {
                 if (col.type === 'number' && col.key !== 'rank') {
                     const values = tableData.map(row => row[col.key] !== undefined ? row[col.key] : null).filter(v => v !== null);
                     if (col.order === 'deviation') {
                         bestScores[col.key] = values.reduce((prev, curr) => (Math.abs(curr - GT_GMP_VALUE) < Math.abs(prev - GT_GMP_VALUE) ? curr : prev));
-                    } else if (col.order === 'asc') {
-                        bestScores[col.key] = Math.min(...values);
-                    } else {
+                    } else if (col.order === 'desc') {
                         bestScores[col.key] = Math.max(...values);
+                    } else {
+                        bestScores[col.key] = Math.min(...values);
                     }
                 }
             });
@@ -269,10 +287,6 @@
             const now = new Date();
 
             tableData.forEach((row, index) => {
-                // Find original index in unsorted data for the onclick handler,
-                // OR just pass the object. Actually, passing the current index in tableData is fine
-                // because tableData is now sorted.
-
                 const rank = index + 1;
                 const rowDate = row.Date ? new Date(row.Date) : new Date('2000-01-01');
                 const isNew = (now - rowDate) < ONE_WEEK;
@@ -315,24 +329,22 @@
                 }
             });
         }
+
         function sortTable(columnIndex) {
-            if (sortColIndex === columnIndex) { sortAscending = !sortAscending; }
-            else { sortColIndex = columnIndex; sortAscending = columns[columnIndex].order !== 'desc'; }
-            renderTable();
-            updateHeaderIcons();
+            // Simply set the index. No toggling allowed.
+            if (columns[columnIndex].type !== 'none') {
+                sortColIndex = columnIndex;
+                renderTable();
+                updateHeaderStyles();
+            }
         }
-        function updateHeaderIcons() {
-            const headers = document.querySelectorAll('th i.fa-sort, th i.fa-sort-up, th i.fa-sort-down');
-            headers.forEach((icon, index) => {
-                icon.className = 'fas fa-sort';
-                // Adjust index because we added an unsortable 'info' column at index 2
-                // Visual Index: Rank(0), Model(1), Info(2), GMP(3)...
-                // Columns Array: Rank(0), Model(1), Info(2), GMP(3)...
-                // Matches perfectly.
+
+        function updateHeaderStyles() {
+            const headers = document.querySelectorAll('th');
+            headers.forEach((th, index) => {
+                th.classList.remove('active-sort');
                 if (index === sortColIndex) {
-                    icon.className = sortAscending ? 'fas fa-sort-up' : 'fas fa-sort-down';
-                    icon.style.opacity = '1';
-                    icon.style.color = '#E84A27';
+                    th.classList.add('active-sort');
                 }
             });
         }
