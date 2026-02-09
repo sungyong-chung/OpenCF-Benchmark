@@ -9,7 +9,31 @@
         "Collision Rate (%)": 1.8,
         "minADE": 1.289,
         "minFDE": 3.032,
-        "Date": "2026-01-26"
+        "Date": "2026-01-26",
+        "meta": {
+            "description": "Full Velocity Difference Model (CTH Variant)",
+            "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Acceleration (a). Parameters calibrated: K1n (spacing gain), K2n (speed diff gain), s0n (min spacing), Tn (time headway), Vmaxn (max speed).",
+            "assumptions": "No assumptions provided.",
+            "paper_link": ""
+        }
+    },
+    {
+        "Model": "FVDM_SIGMOID_RMSE_a",
+        "MW Test (p)": 0.0145,
+        "Avg Trans Prob": 0.2819,
+        "RMSE (v)": 0.073,
+        "RMSE (s)": 0.019,
+        "RMSE (a)": 0.692,
+        "Collision Rate (%)": 1.4,
+        "minADE": 1.247,
+        "minFDE": 2.906,
+        "Date": "2026-02-09",
+        "meta": {
+            "description": "Full Velocity Difference Model (Sigmoid Variant)",
+            "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Acceleration (a). Parameters calibrated: K1n (spacing gain), K2n (speed diff gain), s0n (min spacing), Tn (time headway), Vmaxn (max speed).",
+            "assumptions": "No assumptions provided.",
+            "paper_link": ""
+        }
     },
     {
         "Model": "FVDM_CTH_RMSE_v",
@@ -21,7 +45,13 @@
         "Collision Rate (%)": 1.0,
         "minADE": 1.205,
         "minFDE": 2.866,
-        "Date": "2026-01-26"
+        "Date": "2026-01-26",
+        "meta": {
+            "description": "Full Velocity Difference Model (CTH Variant)",
+            "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Speed (v). Parameters calibrated: K1n (spacing gain), K2n (speed diff gain), s0n (min spacing), Tn (time headway), Vmaxn (max speed).",
+            "assumptions": "No assumptions provided.",
+            "paper_link": ""
+        }
     },
     {
         "Model": "FVDM_SIGMOID_RMSE_v",
@@ -33,7 +63,13 @@
         "Collision Rate (%)": 1.0,
         "minADE": 1.201,
         "minFDE": 2.843,
-        "Date": "2026-01-26"
+        "Date": "2026-01-26",
+        "meta": {
+            "description": "Full Velocity Difference Model (Sigmoid Variant)",
+            "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Speed (v). Parameters calibrated: K1n (spacing gain), K2n (speed diff gain), s0n (min spacing), Tn (time headway), Vmaxn (max speed).",
+            "assumptions": "No assumptions provided.",
+            "paper_link": ""
+        }
     },
     {
         "Model": "FVDM_SIGMOID_RMSE_s",
@@ -45,7 +81,13 @@
         "Collision Rate (%)": 0.8,
         "minADE": 1.195,
         "minFDE": 2.826,
-        "Date": "2026-01-26"
+        "Date": "2026-01-26",
+        "meta": {
+            "description": "Full Velocity Difference Model (Sigmoid Variant)",
+            "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Spacing (s). Parameters calibrated: K1n (spacing gain), K2n (speed diff gain), s0n (min spacing), Tn (time headway), Vmaxn (max speed).",
+            "assumptions": "No assumptions provided.",
+            "paper_link": ""
+        }
     },
     {
         "Model": "FVDM_CTH_RMSE_s",
@@ -57,7 +99,13 @@
         "Collision Rate (%)": 0.8,
         "minADE": 1.183,
         "minFDE": 2.804,
-        "Date": "2026-01-26"
+        "Date": "2026-01-26",
+        "meta": {
+            "description": "Full Velocity Difference Model (CTH Variant)",
+            "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Spacing (s). Parameters calibrated: K1n (spacing gain), K2n (speed diff gain), s0n (min spacing), Tn (time headway), Vmaxn (max speed).",
+            "assumptions": "No assumptions provided.",
+            "paper_link": ""
+        }
     },
     {
         "Model": "VAN_AREM_RMSE_a",
@@ -69,7 +117,13 @@
         "Collision Rate (%)": 1.6,
         "minADE": 1.377,
         "minFDE": 3.13,
-        "Date": "2026-01-26"
+        "Date": "2026-01-26",
+        "meta": {
+            "description": "Van Arem Car-Following Model",
+            "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Acceleration (a). Parameters calibrated: ka, kv, kd, t_system (time gap), v_int (intended speed), r_min, d_p, k, d.",
+            "assumptions": "No assumptions provided.",
+            "paper_link": ""
+        }
     },
     {
         "Model": "VAN_AREM_RMSE_v",
@@ -81,7 +135,13 @@
         "Collision Rate (%)": 0.6,
         "minADE": 1.288,
         "minFDE": 2.974,
-        "Date": "2026-01-26"
+        "Date": "2026-01-26",
+        "meta": {
+            "description": "Van Arem Car-Following Model",
+            "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Speed (v). Parameters calibrated: ka, kv, kd, t_system (time gap), v_int (intended speed), r_min, d_p, k, d.",
+            "assumptions": "No assumptions provided.",
+            "paper_link": ""
+        }
     },
     {
         "Model": "VAN_AREM_RMSE_s",
@@ -93,7 +153,13 @@
         "Collision Rate (%)": 0.2,
         "minADE": 1.238,
         "minFDE": 2.863,
-        "Date": "2026-01-26"
+        "Date": "2026-01-26",
+        "meta": {
+            "description": "Van Arem Car-Following Model",
+            "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Spacing (s). Parameters calibrated: ka, kv, kd, t_system (time gap), v_int (intended speed), r_min, d_p, k, d.",
+            "assumptions": "No assumptions provided.",
+            "paper_link": ""
+        }
     },
     {
         "Model": "GIPPS_RMSE_a",
@@ -105,7 +171,13 @@
         "Collision Rate (%)": 0.0,
         "minADE": 1.523,
         "minFDE": 3.33,
-        "Date": "2026-01-26"
+        "Date": "2026-01-26",
+        "meta": {
+            "description": "Gipps' Model",
+            "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Acceleration (a). Parameters calibrated: amaxn (max accel), bn (decel), taun (reaction time), thetan (variability), s0n (min spacing), Vmaxn (max speed), bhat (estimated leader decel).",
+            "assumptions": "No assumptions provided.",
+            "paper_link": ""
+        }
     },
     {
         "Model": "GIPPS_RMSE_v",
@@ -117,7 +189,13 @@
         "Collision Rate (%)": 0.0,
         "minADE": 1.449,
         "minFDE": 3.186,
-        "Date": "2026-01-26"
+        "Date": "2026-01-26",
+        "meta": {
+            "description": "Gipps' Model",
+            "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Speed (v). Parameters calibrated: amaxn (max accel), bn (decel), taun (reaction time), thetan (variability), s0n (min spacing), Vmaxn (max speed), bhat (estimated leader decel).",
+            "assumptions": "No assumptions provided.",
+            "paper_link": ""
+        }
     },
     {
         "Model": "GIPPS_RMSE_s",
@@ -129,7 +207,13 @@
         "Collision Rate (%)": 0.0,
         "minADE": 1.455,
         "minFDE": 3.199,
-        "Date": "2026-01-26"
+        "Date": "2026-01-26",
+        "meta": {
+            "description": "Gipps' Model",
+            "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Spacing (s). Parameters calibrated: amaxn (max accel), bn (decel), taun (reaction time), thetan (variability), s0n (min spacing), Vmaxn (max speed), bhat (estimated leader decel).",
+            "assumptions": "No assumptions provided.",
+            "paper_link": ""
+        }
     },
     {
         "Model": "IDM_RMSE_a",
@@ -141,7 +225,13 @@
         "Collision Rate (%)": 0.0,
         "minADE": 1.921,
         "minFDE": 3.743,
-        "Date": "2026-01-26"
+        "Date": "2026-01-26",
+        "meta": {
+            "description": "Intelligent Driver Model (IDM)",
+            "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Acceleration (a). Parameters calibrated: v0 (desired speed), T (time headway), a_max (max accel), b (comfortable decel), s0 (min gap), delta (exponent).",
+            "assumptions": "No assumptions provided.",
+            "paper_link": ""
+        }
     },
     {
         "Model": "SIDM_RMSE_a",
@@ -153,7 +243,13 @@
         "Collision Rate (%)": 0.0,
         "minADE": 1.93,
         "minFDE": 3.722,
-        "Date": "2026-01-26"
+        "Date": "2026-01-26",
+        "meta": {
+            "description": "Stochastic Intelligent Driver Model (SIDM)",
+            "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Acceleration (a). Parameters calibrated: v0, T, a_max, b, s0, delta, sigma (noise std dev).",
+            "assumptions": "No assumptions provided.",
+            "paper_link": ""
+        }
     },
     {
         "Model": "IDM_RMSE_v",
@@ -165,7 +261,13 @@
         "Collision Rate (%)": 0.0,
         "minADE": 1.488,
         "minFDE": 3.086,
-        "Date": "2026-01-26"
+        "Date": "2026-01-26",
+        "meta": {
+            "description": "Intelligent Driver Model (IDM)",
+            "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Speed (v). Parameters calibrated: v0 (desired speed), T (time headway), a_max (max accel), b (comfortable decel), s0 (min gap), delta (exponent).",
+            "assumptions": "No assumptions provided.",
+            "paper_link": ""
+        }
     },
     {
         "Model": "SIDM_RMSE_v",
@@ -177,7 +279,13 @@
         "Collision Rate (%)": 0.0,
         "minADE": 1.512,
         "minFDE": 3.126,
-        "Date": "2026-01-26"
+        "Date": "2026-01-26",
+        "meta": {
+            "description": "Stochastic Intelligent Driver Model (SIDM)",
+            "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Speed (v). Parameters calibrated: v0, T, a_max, b, s0, delta, sigma (noise std dev).",
+            "assumptions": "No assumptions provided.",
+            "paper_link": ""
+        }
     },
     {
         "Model": "SIDM_RMSE_s",
@@ -189,7 +297,13 @@
         "Collision Rate (%)": 0.0,
         "minADE": 1.331,
         "minFDE": 2.735,
-        "Date": "2026-01-26"
+        "Date": "2026-01-26",
+        "meta": {
+            "description": "Stochastic Intelligent Driver Model (SIDM)",
+            "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Spacing (s). Parameters calibrated: v0, T, a_max, b, s0, delta, sigma (noise std dev).",
+            "assumptions": "No assumptions provided.",
+            "paper_link": ""
+        }
     },
     {
         "Model": "IDM_RMSE_s",
@@ -201,6 +315,12 @@
         "Collision Rate (%)": 0.0,
         "minADE": 1.438,
         "minFDE": 3.019,
-        "Date": "2026-01-26"
+        "Date": "2026-01-26",
+        "meta": {
+            "description": "Intelligent Driver Model (IDM)",
+            "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Spacing (s). Parameters calibrated: v0 (desired speed), T (time headway), a_max (max accel), b (comfortable decel), s0 (min gap), delta (exponent).",
+            "assumptions": "No assumptions provided.",
+            "paper_link": ""
+        }
     }
 ]
