@@ -15,6 +15,7 @@
         :root {
             --uiuc-navy: #13294B;
             --uiuc-orange: #E84A27;
+            --uiuc-green: #2D6A4F;
             --uiuc-cloud: #f8f9fa;
             --text-dark: #333;
             --border-color: #ddd;
@@ -114,28 +115,27 @@
             text-align: center;
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
-            font-size: 0.8rem;
-            color: white !important;
-            padding: 0.4rem !important;
-            border-bottom: none;
+            font-size: 0.9rem; /* Increased slightly for visibility */
+            padding: 0.6rem !important;
+            border-bottom: 2px solid var(--border-color) !important;
+            background-color: white !important; /* Force white background */
         }
 
-        /* --- UPDATED: Explicit Background Colors for Super Headers --- */
-        .bg-dynamics {
-            background-color: #1E3A5F !important; /* Navy Blue */
-            color: white !important;
+        /* Updated Color Classes for Text instead of Background */
+        .text-dynamics {
+            color: #1E3A5F;
+            border-top: 4px solid #1E3A5F; /* Optional: adds a nice top bar to grouping */
         }
 
-        .bg-short {
-            background-color: #E84A27 !important; /* Orange */
-            color: white !important;
+        .text-short {
+            color: #E84A27;
+            border-top: 4px solid #E84A27;
         }
 
-        .bg-long {
-            background-color: #2D6A4F !important; /* Green */
-            color: white !important;
+        .text-long {
+            color: #2D6A4F;
+            border-top: 4px solid #2D6A4F;
         }
-        /* ----------------------------------------------------------- */
 
         th {
             font-family: 'Montserrat', sans-serif;
@@ -148,6 +148,7 @@
             white-space: nowrap;
             border-bottom: 2px solid var(--border-color);
             background-color: #f8f9fa;
+            text-align: center; /* Center Header Text */
         }
 
         th:hover {
@@ -155,18 +156,14 @@
             color: var(--uiuc-orange);
         }
 
-        /* Disable hover effect for unsortable columns and super headers */
-        th.no-sort, th.super-header {
+        /* Disable hover pointer for Model column since sorting is disabled */
+        th:nth-child(2) {
             cursor: default;
         }
-        th.no-sort:hover {
-            background-color: #f8f9fa; /* Keep original background */
-            color: var(--uiuc-navy);   /* Keep original color */
+        th:nth-child(2):hover {
+            background-color: #f8f9fa;
+            color: var(--uiuc-navy);
         }
-        /* Ensure super headers keep their background color on hover */
-        th.super-header:hover.bg-dynamics { background-color: #1E3A5F !important; color: white !important; }
-        th.super-header:hover.bg-short { background-color: #E84A27 !important; color: white !important; }
-        th.super-header:hover.bg-long { background-color: #2D6A4F !important; color: white !important; }
 
         .border-right-thick {
             border-right: 2px solid #ccc !important;
@@ -178,18 +175,21 @@
             border-bottom: 1px solid #eee;
             color: #444;
             font-variant-numeric: tabular-nums;
+            text-align: center; /* Center Body Text/Numbers */
+        }
+
+        /* Keep Model Name left aligned for readability */
+        td.model-col {
+            font-weight: 600;
+            color: var(--uiuc-navy);
+            text-align: left;
+            padding-left: 1rem !important;
         }
 
         td.rank-col {
             font-weight: 700;
             color: var(--uiuc-orange);
-            text-align: center;
             white-space: nowrap;
-        }
-
-        td.model-col {
-            font-weight: 600;
-            color: var(--uiuc-navy);
         }
 
         .badge-pass {
@@ -264,26 +264,24 @@
             font-size: 1rem;
             font-weight: 700;
             margin-bottom: 1rem;
-            padding: 0.6rem;
-            border-radius: 4px;
-            text-align: center;
-            color: white; /* Force white text */
-            border: none;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #eee;
         }
 
-        /* --- UPDATED: Legend Headers Match Super Headers Exactly --- */
         .metric-group.dynamics h4 {
-            background-color: #1E3A5F;
+            color: #1E3A5F;
+            border-color: #1E3A5F;
         }
 
         .metric-group.short h4 {
-            background-color: #E84A27;
+            color: #E84A27;
+            border-color: #E84A27;
         }
 
         .metric-group.long h4 {
-            background-color: #2D6A4F;
+            color: #2D6A4F;
+            border-color: #2D6A4F;
         }
-        /* --------------------------------------------------------- */
 
         .metric-item {
             margin-bottom: 1rem;
@@ -349,16 +347,14 @@
                 <thead>
                 <tr>
                     <th colspan="3" style="background: white; border: none;"></th>
-                    <th colspan="2" class="super-header bg-dynamics">Transition Probability Analysis</th>
-                    <th colspan="3" class="super-header bg-short">One-Step Prediction (t=3.0s)</th>
-                    <th colspan="3" class="super-header bg-long">Open-Loop Prediction (Full Horizon)</th>
+                    <th colspan="2" class="super-header text-dynamics">Transition Probability Analysis</th>
+                    <th colspan="3" class="super-header text-short">One-Step Prediction</th>
+                    <th colspan="3" class="super-header text-long">Open-Loop Prediction</th>
                 </tr>
                 <tr>
                     <th class="text-center" onclick="sortTable(0)">Rank</th>
-
-                    <th class="no-sort">Model</th>
-                    <th class="border-right-thick text-center no-sort">Info</th>
-
+                    <th class="" onclick="sortTable(1)">Model</th>
+                    <th class="border-right-thick text-center">Info</th>
                     <th onclick="sortTable(3)">Geometric Mean Prob<br><small>[%]</small></th>
                     <th class="border-right-thick" onclick="sortTable(4)">MW Test <br><small>(P-Value)</small></th>
                     <th onclick="sortTable(5)">RMSE (s) <br><small>[m]</small></th>
@@ -450,9 +446,10 @@
 
 <script>
     const GT_GMP_VALUE = 0.2572;
+    // UPDATED: Changed 'Model' type to 'none' to disable sorting
     const columns = [
         {key: 'rank', type: 'number', order: 'asc'},
-        {key: 'Model', type: 'none', order: 'asc'}, /* Disabled sorting */
+        {key: 'Model', type: 'none', order: 'asc'}, // Sorting Disabled
         {key: 'info', type: 'none'},
         {key: 'Avg Trans Prob', type: 'number', order: 'deviation'},
         {key: 'MW Test (p)', type: 'number', order: 'desc'},
@@ -483,8 +480,8 @@
 
     function formatNumber(num, key) {
         if (typeof num !== 'number') return '-';
-        if (key === 'Collision Rate (%)') return num.toFixed(2);
-        return num.toFixed(4);
+        if (key === 'Collision Rate (%)') return num.toFixed(2); // Show 2 decimals for collision
+        return num.toFixed(4); // Default to 4 for everything else
     }
 
     window.showModelInfo = function (index) {
@@ -514,21 +511,23 @@
         tbody.innerHTML = '';
         const colConfig = columns[sortColIndex];
 
-        tableData.sort((a, b) => {
-            if (colConfig.type === 'none') return 0;
-            const key = colConfig.key;
-            const valA = a[key] !== undefined ? a[key] : -999;
-            const valB = b[key] !== undefined ? b[key] : -999;
+        // This ensures sorting only happens if type is NOT 'none'
+        if (colConfig.type !== 'none') {
+            tableData.sort((a, b) => {
+                const key = colConfig.key;
+                const valA = a[key] !== undefined ? a[key] : -999;
+                const valB = b[key] !== undefined ? b[key] : -999;
 
-            if (colConfig.type === 'string') return valA.localeCompare(valB);
-            if (colConfig.order === 'deviation') {
-                const diffA = Math.abs(valA - GT_GMP_VALUE);
-                const diffB = Math.abs(valB - GT_GMP_VALUE);
-                return diffA - diffB;
-            }
-            if (colConfig.order === 'desc') return valB - valA;
-            return valA - valB;
-        });
+                if (colConfig.type === 'string') return valA.localeCompare(valB);
+                if (colConfig.order === 'deviation') {
+                    const diffA = Math.abs(valA - GT_GMP_VALUE);
+                    const diffB = Math.abs(valB - GT_GMP_VALUE);
+                    return diffA - diffB;
+                }
+                if (colConfig.order === 'desc') return valB - valA;
+                return valA - valB;
+            });
+        }
 
         const bestScores = {};
         columns.forEach(col => {
@@ -577,14 +576,14 @@
                             </button>
                         </td>
 
-                        <td class="${isBest('Avg Trans Prob', avgProb)}">${formatNumber(avgProb, 'Avg Trans Prob')}</td>
+                        <td class="${isBest('Avg Trans Prob', avgProb)}">${formatNumber(avgProb)}</td>
                         <td class="border-right-thick">${pBadge}</td>
-                        <td class="${isBest('RMSE (s)', row['RMSE (s)'])}">${formatNumber(row['RMSE (s)'], 'RMSE (s)')}</td>
-                        <td class="${isBest('RMSE (v)', row['RMSE (v)'])}">${formatNumber(row['RMSE (v)'], 'RMSE (v)')}</td>
-                        <td class="border-right-thick ${isBest('RMSE (a)', row['RMSE (a)'])}">${formatNumber(row['RMSE (a)'], 'RMSE (a)')}</td>
-                        <td class="${isBest('Collision Rate (%)', row['Collision Rate (%)'])}">${formatNumber(row['Collision Rate (%)'], 'Collision Rate (%)')}</td>
-                        <td class="${isBest('minADE', row['minADE'])}">${formatNumber(row['minADE'], 'minADE')}</td>
-                        <td class="${isBest('minFDE', row['minFDE'])}">${formatNumber(row['minFDE'], 'minFDE')}</td>
+                        <td class="${isBest('RMSE (s)', row['RMSE (s)'])}">${formatNumber(row['RMSE (s)'])}</td>
+                        <td class="${isBest('RMSE (v)', row['RMSE (v)'])}">${formatNumber(row['RMSE (v)'])}</td>
+                        <td class="border-right-thick ${isBest('RMSE (a)', row['RMSE (a)'])}">${formatNumber(row['RMSE (a)'])}</td>
+                        <td class="${isBest('Collision Rate (%)', row['Collision Rate (%)'])}">${formatNumber(row['Collision Rate (%)'])}</td>
+                        <td class="${isBest('minADE', row['minADE'])}">${formatNumber(row['minADE'])}</td>
+                        <td class="${isBest('minFDE', row['minFDE'])}">${formatNumber(row['minFDE'])}</td>
                     `;
                 tbody.appendChild(tr);
             }
