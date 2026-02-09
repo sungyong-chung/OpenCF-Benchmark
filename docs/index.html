@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OpenCF Benchmark Leaderboard</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Source+Sans+Pro:wght@400;600&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Source+Sans+Pro:wght@400;600;700&display=swap"
           rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -34,7 +34,7 @@
         header {
             background-color: var(--uiuc-navy);
             color: white;
-            padding: 1.5rem 0;
+            padding: 1rem 0; /* Reduced padding */
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             z-index: 10;
         }
@@ -45,12 +45,14 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            max-width: 1300px; /* Aligns header content with table */
+            margin: 0 auto;
         }
 
         .brand-text h1 {
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
-            font-size: 2rem;
+            font-size: 1.5rem; /* Slightly smaller header */
             margin: 0;
         }
 
@@ -63,6 +65,7 @@
             text-decoration: none;
             font-weight: 600;
             margin-left: 1.5rem;
+            font-size: 0.9rem;
             transition: color 0.2s;
         }
 
@@ -72,9 +75,12 @@
 
         .main-container {
             width: 100%;
-            padding: 1rem 1rem;
+            padding: 1.5rem 1rem;
             margin: 0;
             flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centers the card */
         }
 
         .card-custom {
@@ -84,11 +90,13 @@
             border: none;
             overflow: hidden;
             margin-bottom: 2rem;
+            width: 100%;
+            max-width: 1250px; /* Limits width to prevent empty space */
         }
 
         .card-header-custom {
             background: white;
-            padding: 1.5rem 2rem;
+            padding: 1rem 1.5rem; /* Reduced padding */
             border-bottom: 1px solid #eee;
             display: flex;
             justify-content: space-between;
@@ -101,7 +109,7 @@
 
         .table {
             margin-bottom: 0;
-            font-size: 0.9rem;
+            font-size: 0.85rem; /* COMPACT FONT SIZE */
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
@@ -112,10 +120,10 @@
             text-align: center;
             font-family: 'Montserrat', sans-serif;
             font-weight: 800;
-            font-size: 0.8rem;
+            font-size: 0.75rem; /* Smaller super header */
             text-transform: uppercase;
             letter-spacing: 1px;
-            padding: 1rem 0.5rem !important;
+            padding: 0.6rem 0.5rem !important; /* Compact padding */
             background-color: white !important;
             border-bottom: 2px solid var(--border-color) !important;
             border-top: none !important;
@@ -132,7 +140,7 @@
             color: #6c757d;
             text-transform: uppercase;
             font-size: 0.7rem;
-            padding: 1rem 0.5rem !important;
+            padding: 0.75rem 0.4rem !important; /* Compact padding */
             cursor: pointer;
             white-space: nowrap;
             border-bottom: 1px solid var(--border-color);
@@ -147,32 +155,37 @@
             color: var(--uiuc-navy);
         }
 
-        /* Disable pointer for Model column */
         thead tr:last-child th:nth-child(2) {
             cursor: default;
         }
 
         /* --- Table Body --- */
         td {
-            padding: 1rem 0.5rem !important;
+            padding: 0.55rem 0.4rem !important; /* TIGHTER PADDING FOR MORE ROWS */
             vertical-align: middle;
             border-bottom: 1px solid #f0f0f0;
-            color: #444;
+            color: #555;
             font-variant-numeric: tabular-nums;
             text-align: center;
         }
 
+        /* Model Column Specifics */
         td.model-col {
             font-weight: 600;
             color: var(--uiuc-navy);
             text-align: left !important;
-            padding-left: 1.5rem !important;
+            padding-left: 1rem !important;
+            max-width: 250px; /* Prevents model name from taking over */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         td.rank-col {
             font-weight: 700;
             color: var(--uiuc-orange);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            width: 60px; /* Fixed width for rank */
         }
 
         .border-right-thick {
@@ -186,29 +199,31 @@
         }
 
         /* --- Badges & Buttons --- */
-        .badge-pass { background-color: #d4edda; color: #155724; padding: 4px 8px; border-radius: 6px; font-weight: 600; font-size: 0.75rem;}
-        .badge-fail { background-color: #f8d7da; color: #721c24; padding: 4px 8px; border-radius: 6px; font-weight: 600; font-size: 0.75rem;}
+        .badge-pass { background-color: #d4edda; color: #155724; padding: 2px 6px; border-radius: 4px; font-weight: 600; font-size: 0.7rem;}
+        .badge-fail { background-color: #f8d7da; color: #721c24; padding: 2px 6px; border-radius: 4px; font-weight: 600; font-size: 0.7rem;}
 
         .badge-new {
             background-color: var(--uiuc-orange);
             color: white;
-            padding: 2px 6px;
-            border-radius: 4px;
+            padding: 1px 5px;
+            border-radius: 3px;
             font-weight: 700;
             font-size: 0.6rem;
-            margin-left: 8px;
+            margin-left: 6px;
             vertical-align: middle;
+            text-transform: uppercase;
         }
 
         .btn-info-custom {
-            width: 28px;
-            height: 28px;
-            line-height: 26px;
+            width: 24px;
+            height: 24px;
+            line-height: 22px;
             border-radius: 50%;
-            border: 1px solid #ccc;
-            color: #888;
+            border: 1px solid #ddd;
+            color: #aaa;
             background: white;
             transition: all 0.2s;
+            font-size: 0.75rem;
         }
 
         .btn-info-custom:hover {
@@ -217,35 +232,36 @@
             background: #f8f9fa;
         }
 
+        /* --- BEST SCORE STYLING (UPDATED) --- */
         .best-score {
-            font-weight: 800;
-            color: var(--uiuc-navy);
-            border-bottom: 2px solid var(--uiuc-orange);
+            font-weight: 800 !important;
+            color: var(--uiuc-orange) !important;
+            /* removed underline, using color/weight only */
         }
 
         /* --- Legend & Footer --- */
         .metrics-legend {
             background: white;
-            padding: 3rem 1rem; /* Matched to main container padding */
+            padding: 2rem 1rem;
             border-top: 1px solid #eee;
         }
 
         .metrics-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 3rem;
-            width: 100%; /* CHANGED: Full width to match table */
-            max-width: 100%; /* CHANGED: Removed 1200px limit */
-            margin: 0;
+            gap: 2rem;
+            width: 100%;
+            max-width: 1250px; /* Match table width */
+            margin: 0 auto;
         }
 
         .metric-group h4 {
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             padding-bottom: 0.5rem;
             border-bottom: 2px solid #eee;
         }
@@ -258,8 +274,8 @@
             background: var(--uiuc-navy);
             color: rgba(255, 255, 255, 0.6);
             text-align: center;
-            padding: 2rem;
-            font-size: 0.85rem;
+            padding: 1.5rem;
+            font-size: 0.8rem;
             margin-top: auto;
         }
     </style>
@@ -281,9 +297,9 @@
     <div class="card-custom">
         <div class="card-header-custom">
             <div>
-                <h2 style="font-family: 'Montserrat', sans-serif; font-weight: 700; margin: 0; color: var(--uiuc-navy);">Leaderboard Standings</h2>
+                <h2 style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.25rem; margin: 0; color: var(--uiuc-navy);">Leaderboard Standings</h2>
             </div>
-            <small class="text-muted" style="font-weight: 600;">Last Updated: <span id="last-updated">...</span></small>
+            <small class="text-muted" style="font-weight: 600; font-size: 0.8rem;">Last Updated: <span id="last-updated">...</span></small>
         </div>
         <div class="table-responsive">
             <table class="table table-hover" id="leaderboardTable">
@@ -298,11 +314,14 @@
                     <th class="text-center" onclick="sortTable(0)">Rank</th>
                     <th class="" onclick="sortTable(1)">Model</th>
                     <th class="border-right-thick text-center">Info</th>
-                    <th onclick="sortTable(3)" style="width: 13%;">Geometric Mean Prob<br><small style="font-weight: 400; opacity: 0.7;">[%]</small></th>
+
+                    <th onclick="sortTable(3)">Geometric Mean Prob<br><small style="font-weight: 400; opacity: 0.7;">[%]</small></th>
                     <th class="border-right-thick" onclick="sortTable(4)">MW Test <br><small style="font-weight: 400; opacity: 0.7;">(P-Value)</small></th>
+
                     <th onclick="sortTable(5)">RMSE (s) <br><small style="font-weight: 400; opacity: 0.7;">[m]</small></th>
                     <th onclick="sortTable(6)">RMSE (v) <br><small style="font-weight: 400; opacity: 0.7;">[m/s]</small></th>
                     <th class="border-right-thick" onclick="sortTable(7)">RMSE (a) <br><small style="font-weight: 400; opacity: 0.7;">[m/s²]</small></th>
+
                     <th onclick="sortTable(8)">Collision <br><small style="font-weight: 400; opacity: 0.7;">[%]</small></th>
                     <th onclick="sortTable(9)">minADE <br><small style="font-weight: 400; opacity: 0.7;">[m]</small></th>
                     <th onclick="sortTable(10)">minFDE <br><small style="font-weight: 400; opacity: 0.7;">[m]</small></th>
