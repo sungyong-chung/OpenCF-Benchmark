@@ -8,7 +8,7 @@
 
 **OpenCF-Benchmark** is an open-source evaluation framework for car-following models.
 
-It provides a standardized testbed to benchmark car-following models against real-world data derived from the **Waymo Open Motion Dataset (WOMD)**.
+It provides a standardized testbed to benchmark car-following models against real-world data derived from high-fidelity onboard sensors of Waymo vehicles.
 
 🔗 **[View the Live Leaderboard](https://sungyong-chung.github.io/OpenCF-Benchmark/)**
 
@@ -16,16 +16,19 @@ It provides a standardized testbed to benchmark car-following models against rea
 
 ## 📂 Dataset Access
 
-This benchmark utilizes data derived from the **Waymo Open Motion Dataset (WOMD)**.
+This benchmark utilizes a massive repository of over 32k car-following pairs (approx. 83 hours of driving) collected from Waymo vehicles.
 
 * **Training Data (`train.csv`):** [**DOWNLOAD HERE (Google Drive)**](https://drive.google.com/file/d/1JCrPkS9FUDC4OihimvV7UpYNfeVIBx4E/view?usp=sharing) *(Currently restricted: Access will be open to the public soon!)*
-    * *Contains processed leader-follower pairs for model calibration/training.*
+    * *Contains 32,059 processed pairs for model calibration/training.*
+    * *Total Volume: 3 million+ time steps (approx. 83 hours).*
     * *You may use this data to train your model, but it is not required for evaluation.*
 * **Test Input (`benchmark_data/test_input.csv`):** Included in this repo.
-    * *Contains the first 2.9s of history for each test pair. Your model must predict the future from t=3.0s onwards.*
+    * *Contains 500 held-out pairs for the leaderboard.*
+    * *Leader: The complete trajectory is provided for the entire duration.*
+    * *Follower: Only the first 2.9s of history is provided. Your model must predict the follower's behavior from t=3.0s onwards.*
 
 ### ⚠️ A Note on Data Processing
-To maintain the integrity of the benchmark and prevent overfitting to specific filtering criteria, **we do not disclose the exact logic used to extract car-following pairs from WOMD.**
+To maintain the integrity of the benchmark and prevent overfitting to specific filtering criteria, **we do not disclose the exact logic used to extract car-following pairs from the raw Waymo data.**
 
 However, please note:
 1.  **Identical Processing:** The Training Set and Test Set were generated using the **exact same** filtering, extraction, and smoothing pipeline.
