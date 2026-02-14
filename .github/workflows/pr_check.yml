@@ -14,6 +14,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: main
+          fetch-depth: 0 # Fetch all history for diff checks
 
       # 2. Checkout the User's untrusted CSV (into a temporary folder)
       - name: Checkout PR Submission
@@ -21,38 +22,112 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           path: tmp_pr_data
+          fetch-depth: 0
 
-      # 3. Unzip the Ground Truth using the Secret Key
+      # 3. SAFETY CHECK: Ensure no deletions or modifications of existing submissions
+      - name: Check for Deleted or Modified Submission Files
+        run: |
+          # Fetch main to compare against
+          git fetch origin main
+
+          # Check for deleted files in submissions/
+          DELETED_FILES=$(git diff --name-only --diff-filter=D origin/main...HEAD -- submissions/)
+          if [ -n "$DELETED_FILES" ]; then
+            echo "❌ ERROR: You are attempting to delete existing submissions: $DELETED_FILES"
+            echo "Please revert these deletions."
+            exit 1
+          fi
+
+          # Check for modified files in submissions/ (prevents changing old entries)
+          MODIFIED_FILES=$(git diff --name-only --diff-filter=M origin/main...HEAD -- submissions/)
+          if [ -n "$MODIFIED_FILES" ]; then
+            echo "❌ ERROR: You are attempting to modify existing submissions: $MODIFIED_FILES"
+            echo "Please revert these changes. Only new files are allowed."
+            exit 1
+          fi
+
+          echo "✅ Safety Check Passed: No existing submissions harmed."
+
+      - name: Check for Modified System Files
+        run: |
+          # Check for changes outside of submissions/
+          CHANGED_SYSTEM_FILES=$(git diff --name-only origin/main...HEAD -- . ':!submissions/')
+          
+          if [ -n "$CHANGED_SYSTEM_FILES" ]; then
+             echo "⚠️ WARNING: This PR modifies system files: $CHANGED_SYSTEM_FILES"
+             echo "Please review these changes carefully before merging!"
+             # We do NOT exit 1 here, so the evaluation still runs.
+          else
+             echo "✅ No system files modified."
+          fi
+
+      # 4. Unzip the Ground Truth using the Secret Key
       - name: Decrypt Ground Truth
         run: |
           unzip -P "${{ secrets.GT_PASSWORD }}" benchmark_data/test_ground_truth.zip -d benchmark_data/
           # Verify it exists
           ls -l benchmark_data/test_ground_truth.csv
 
-      # 4. Set up Python
+      # 5. Set up Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
-      # 5. Install Dependencies
+      # 6. Install Dependencies
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      # 6. Run Evaluation (Using Trusted Script + Untrusted CSV)
+      # 7. Run Evaluation and Save Output
       - name: Run Evaluation
         id: eval
         run: |
-          # Find CSVs in the PR's temp folder
+          # Find CSVs
           files=$(find tmp_pr_data/submissions -name "*.csv")
           
           if [ -z "$files" ]; then
-            echo "No submission files found in PR."
-          else
-            for file in $files; do
-              echo "Evaluating $file..."
-              # We pass the file from the temp folder to our trusted script
-              python scripts/evaluate_submission.py "$file" > result.json
-              cat result.json
-            done
+            echo "::error::No submission files found."
+            exit 1
           fi
+
+          # Create a clearer output file for the comment
+          echo "### 🤖 Automated Evaluation Results" > pr_comment.md
+          
+          for file in $files; do
+            filename=$(basename "$file")
+            echo "Evaluating **$filename**..."
+            
+            # Run script and capture JSON output
+            # We use '|| true' so the workflow doesn't crash immediately if the script fails
+            # This allows us to post a "Failure" comment instead of just silence.
+            OUTPUT=$(python scripts/evaluate_submission.py "$file" 2>&1)
+            EXIT_CODE=$?
+
+            if [ $EXIT_CODE -eq 0 ]; then
+              # Parse JSON to Markdown Table (Simple version)
+              echo "#### ✅ Passing: $filename" >> pr_comment.md
+              echo "\`\`\`json" >> pr_comment.md
+              echo "$OUTPUT" >> pr_comment.md
+              echo "\`\`\`" >> pr_comment.md
+            else
+              echo "#### ❌ Failed: $filename" >> pr_comment.md
+              echo "**Error Log:**" >> pr_comment.md
+              echo "\`\`\`" >> pr_comment.md
+              echo "$OUTPUT" >> pr_comment.md
+              echo "\`\`\`" >> pr_comment.md
+              # Mark the workflow as failed, but continue to post the comment
+              echo "FAILURE_DETECTED=true" >> $GITHUB_ENV
+            fi
+          done
+
+      # 8. Post the Comment to the PR
+      - name: Post Results to PR
+        uses: mshick/add-pr-comment@v2
+        with:
+          message-path: pr_comment.md
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      # 9. Fail the check if any model failed (so you see a Red X)
+      - name: Check for Failures
+        if: env.FAILURE_DETECTED == 'true'
+        run: exit 1

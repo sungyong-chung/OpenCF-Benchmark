@@ -18,7 +18,7 @@ It provides a standardized testbed to benchmark car-following models against rea
 
 This benchmark utilizes a massive repository of over 32k car-following pairs (approx. 83 hours of driving) collected from Waymo vehicles.
 
-* **Training Data (`train.csv`):** [**DOWNLOAD HERE (Google Drive)**](https://drive.google.com/file/d/1JCrPkS9FUDC4OihimvV7UpYNfeVIBx4E/view?usp=sharing) *(Currently restricted: Access will be open to the public soon!)*
+* **Training Data (`train.csv`):** [**DOWNLOAD HERE (Google Drive)**](https://drive.google.com/file/d/1cCbBMO-vWveu0ONfD2lXzxsOFrIEn1z5/view?usp=sharing) *(Currently restricted: Access will be open to the public soon!)*
     * *Contains 32,059 processed pairs for model calibration/training.*
     * *Total Volume: 3 million+ time steps (approx. 83 hours).*
     * *You may use this data to train your model, but it is not required for evaluation.*
