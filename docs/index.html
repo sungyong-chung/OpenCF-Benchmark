@@ -379,7 +379,7 @@
             </div>
             <div class="metric-item">
                 <strong>MW Test (Mann-Whitney U)</strong>
-                <p>P-Value > 0.05 indicates the model's transition distribution is statistically indistinguishable from the Ground Truth.</p>
+                <p>P-Value > 0.10 indicates the model's transition distribution is statistically indistinguishable from the Ground Truth.</p>
             </div>
         </div>
         <div class="metric-group short">
@@ -510,7 +510,7 @@
             if (isTop20 || isNew) {
                 const tr = document.createElement('tr');
                 const pVal = row['MW Test (p)'] || 0;
-                const pBadge = `<span class="${pVal > 0.05 ? 'badge-pass' : 'badge-fail'}">${formatNumber(pVal)}</span>`;
+                const pBadge = `<span class="${pVal > 0.10 ? 'badge-pass' : 'badge-fail'}">${formatNumber(pVal)}</span>`;
 
                 let modelName = row['Model'];
                 if (isNew) modelName += ` <span class="badge-new">NEW</span>`;
