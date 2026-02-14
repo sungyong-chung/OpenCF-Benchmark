@@ -6,7 +6,7 @@
 
 [![Leaderboard](https://img.shields.io/badge/Leaderboard-Live-brightgreen)](https://sungyong-chung.github.io/OpenCF-Benchmark/)
 
-**OpenCF** benchmark is an open-source evaluation framework for car-following models.
+**OpenCF** is an open-source evaluation framework for car-following models.
 
 It provides a standardized testbed to benchmark car-following models against real-world data derived from high-fidelity onboard sensors of Waymo vehicles.
 
