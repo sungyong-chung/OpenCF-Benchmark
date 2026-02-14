@@ -78,14 +78,14 @@
     {
         "Model": "SIDM_RMSE_v",
         "samples_count": 6,
-        "MW Test (p)": 0.0545,
-        "Avg Trans Prob": 0.2723,
-        "RMSE (v)": 0.2426,
+        "MW Test (p)": 0.0584,
+        "Avg Trans Prob": 0.272,
+        "RMSE (v)": 0.2425,
         "RMSE (s)": 0.0217,
-        "RMSE (a)": 2.1391,
+        "RMSE (a)": 2.1403,
         "Collision Rate (%)": 0.0,
-        "minADE": 1.512,
-        "minFDE": 3.1255,
+        "minADE": 1.513,
+        "minFDE": 3.1259,
         "Date": "2026-01-26",
         "meta": {
             "description": "Stochastic Intelligent Driver Model (SIDM)",
@@ -154,14 +154,14 @@
     {
         "Model": "FVDM_SIGMOID_RMSE_a",
         "samples_count": 1,
-        "MW Test (p)": 0.0145,
-        "Avg Trans Prob": 0.2819,
-        "RMSE (v)": 0.0728,
+        "MW Test (p)": 0.0322,
+        "Avg Trans Prob": 0.2811,
+        "RMSE (v)": 0.0723,
         "RMSE (s)": 0.0187,
-        "RMSE (a)": 0.6917,
-        "Collision Rate (%)": 1.4,
-        "minADE": 1.247,
-        "minFDE": 2.9058,
+        "RMSE (a)": 0.6896,
+        "Collision Rate (%)": 1.8,
+        "minADE": 1.284,
+        "minFDE": 3.0152,
         "Date": "2026-02-09",
         "meta": {
             "description": "Full Velocity Difference Model (Sigmoid Variant)",
@@ -306,14 +306,14 @@
     {
         "Model": "SIDM_RMSE_a",
         "samples_count": 6,
-        "MW Test (p)": 0.0,
+        "MW Test (p)": 0.0001,
         "Avg Trans Prob": 0.2237,
-        "RMSE (v)": 0.1692,
+        "RMSE (v)": 0.1693,
         "RMSE (s)": 0.0202,
         "RMSE (a)": 1.5595,
         "Collision Rate (%)": 0.0,
-        "minADE": 1.93,
-        "minFDE": 3.722,
+        "minADE": 1.931,
+        "minFDE": 3.7232,
         "Date": "2026-01-26",
         "meta": {
             "description": "Stochastic Intelligent Driver Model (SIDM)",
@@ -342,25 +342,6 @@
         }
     },
     {
-        "Model": "SIDM_RMSE_s",
-        "samples_count": 6,
-        "MW Test (p)": 0.0,
-        "Avg Trans Prob": 0.2199,
-        "RMSE (v)": 0.2379,
-        "RMSE (s)": 0.0214,
-        "RMSE (a)": 2.0467,
-        "Collision Rate (%)": 0.0,
-        "minADE": 1.331,
-        "minFDE": 2.7355,
-        "Date": "2026-01-26",
-        "meta": {
-            "description": "Stochastic Intelligent Driver Model (SIDM)",
-            "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Spacing (s). Parameters calibrated: v0, T, a_max, b, s0, delta, sigma (noise std dev).",
-            "assumptions": "No assumptions provided.",
-            "paper_link": ""
-        }
-    },
-    {
         "Model": "VAN_AREM_RMSE_s",
         "samples_count": 1,
         "MW Test (p)": 0.0002,
@@ -375,6 +356,25 @@
         "meta": {
             "description": "Van Arem Car-Following Model",
             "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Spacing (s). Parameters calibrated: ka, kv, kd, t_system (time gap), v_int (intended speed), r_min, d_p, k, d.",
+            "assumptions": "No assumptions provided.",
+            "paper_link": ""
+        }
+    },
+    {
+        "Model": "SIDM_RMSE_s",
+        "samples_count": 6,
+        "MW Test (p)": 0.0,
+        "Avg Trans Prob": 0.2168,
+        "RMSE (v)": 0.2376,
+        "RMSE (s)": 0.0215,
+        "RMSE (a)": 2.0707,
+        "Collision Rate (%)": 0.0,
+        "minADE": 1.33,
+        "minFDE": 2.7307,
+        "Date": "2026-01-26",
+        "meta": {
+            "description": "Stochastic Intelligent Driver Model (SIDM)",
+            "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Spacing (s). Parameters calibrated: v0, T, a_max, b, s0, delta, sigma (noise std dev).",
             "assumptions": "No assumptions provided.",
             "paper_link": ""
         }
