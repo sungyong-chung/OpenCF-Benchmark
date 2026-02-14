@@ -10,6 +10,8 @@ __pycache__/
 
 # Ignore the preparation script
 scripts/00_prepare_benchmark_data.py
+scripts/00_dataset_statistics.py
+scripts/03_calculate_gt_transition_probability.py
 scripts/04_train_mccf.py
 scripts/05_generate_mccf_submission.py
 
@@ -19,7 +21,6 @@ baselines/submissions/
 
 # Provide training set from Google Drive.
 benchmark_data/train.csv
-
 benchmark_data/models/
 
 # Ignore local IDE settings

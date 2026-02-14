@@ -1,0 +1,24 @@
+=== OpenCF Benchmark Dataset Statistics ===
+
+Dataset                     Train          Test
+Total Pairs          3.205900e+04    500.000000
+Avg Duration (s)     9.343445e+00      9.200600
+Std Duration (s)     2.633774e+00      2.545305
+Min Duration (s)     5.200000e+00      5.900000
+Max Duration (s)     1.570000e+01     15.600000
+Total Time Steps     3.027503e+06  46504.000000
+Total Driving Hours  8.320597e+01      1.277861
+
+=== Detailed Formatted Values ===
+
+Train Set:
+- Number of Pairs: 32,059
+- Duration: 9.34 s (±2.63)
+- Total Steps: 3,027,503
+- Total Hours: 83.21 h
+
+Test Set:
+- Number of Pairs: 500
+- Duration: 9.20 s (±2.55)
+- Total Steps: 46,504
+- Total Hours: 1.28 h
