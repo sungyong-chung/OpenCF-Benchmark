@@ -6,16 +6,16 @@ import time
 import json
 
 # --- CONFIGURATION ---
-BASE_DIR = '/Users/sungyongchung/Desktop/OpenCF-Eval'
-DATA_DIR = f'{BASE_DIR}/benchmark_data'
-SUBMISSION_DIR = f'{BASE_DIR}/submissions'
-PARAM_DIR = f'{BASE_DIR}/baselines/params'
+DATA_DIR = f'benchmark_data'
+SUBMISSION_DIR = f'submissions'
+PARAM_DIR = f'baselines/params'
 
 os.makedirs(SUBMISSION_DIR, exist_ok=True)
 os.makedirs(PARAM_DIR, exist_ok=True)
 
 # History is provided up to 2.9s. Prediction starts at 3.0s.
 OBSERVATION_WINDOW = 2.9
+PARAM_FILE = f"{PARAM_DIR}/baseline_parameters.json"
 
 
 # --- MODEL DEFINITIONS ---
@@ -58,7 +58,7 @@ def fvdm_sigmoid_acceleration(v, delta_v, s, params):
     delta_v_rel = -1 * delta_v
     K1n, K2n, s0n, Tn, Vmaxn = params
     Vsn = 0.0 if s <= s0n else (Vmaxn / 2) * (
-                1 - np.cos(np.pi * (s - s0n) / (Tn * Vmaxn))) if s <= s0n + Tn * Vmaxn else Vmaxn
+            1 - np.cos(np.pi * (s - s0n) / (Tn * Vmaxn))) if s <= s0n + Tn * Vmaxn else Vmaxn
     a = K1n * (Vsn - v) + K2n * delta_v_rel
     return float(np.clip(a, -10, 5))
 
@@ -170,7 +170,19 @@ if __name__ == "__main__":
     train_df = pd.read_csv(f"{DATA_DIR}/train.csv")
     test_truth_df = pd.read_csv(f"{DATA_DIR}/test_ground_truth.csv")
 
-    # Subsample for calibration speed
+    # Load Params if exist
+    param_registry = {}
+    if os.path.exists(PARAM_FILE):
+        print(f"Loading existing parameters from {PARAM_FILE}...")
+        try:
+            with open(PARAM_FILE, 'r') as f:
+                param_registry = json.load(f)
+        except Exception as e:
+            print(f"⚠️ Error loading JSON: {e}. Starting fresh.")
+    else:
+        print("No existing parameter file found. Will calibrate.")
+
+    # Subsample for calibration speed (if needed)
     train_pair_ids = train_df['CF_pair_id'].unique()
     sampled_ids = np.random.choice(train_pair_ids, min(500, len(train_pair_ids)), replace=False)
     calib_df = train_df[train_df['CF_pair_id'].isin(sampled_ids)].copy()
@@ -178,27 +190,34 @@ if __name__ == "__main__":
     models = ['IDM', 'SIDM', 'VAN_AREM', 'FVDM_CTH', 'FVDM_SIGMOID', 'GIPPS']
     targets = ['v', 's', 'a']
 
-    param_registry = {}
-
     for model_name in models:
         for target in targets:
             sub_name = f"{model_name}_RMSE_{target}"
             print(f"\nProcessing: {sub_name}")
 
-            # 1. Calibrate
-            start_t = time.time()
-            result = differential_evolution(
-                calibration_objective,
-                bounds=BOUNDS[model_name],
-                args=(calib_df, 0.1, model_name, target),
-                strategy='best1bin', popsize=15, maxiter=50, tol=0.01, mutation=(0.5, 1.0), recombination=0.7,
-                disp=True, seed=42
-            )
-            best_params = result.x
-            print(f"Calibration Done ({time.time() - start_t:.1f}s). Params: {best_params}")
-            param_registry[sub_name] = best_params.tolist()
+            # 1. Check Params / Calibrate
+            if sub_name in param_registry:
+                best_params = np.array(param_registry[sub_name])
+                print(f"   -> Using loaded params: {best_params}")
+            else:
+                print("   -> Calibrating...")
+                start_t = time.time()
+                result = differential_evolution(
+                    calibration_objective,
+                    bounds=BOUNDS[model_name],
+                    args=(calib_df, 0.1, model_name, target),
+                    strategy='best1bin', popsize=15, maxiter=50, tol=0.01, mutation=(0.5, 1.0), recombination=0.7,
+                    disp=True, seed=42
+                )
+                best_params = result.x
+                print(f"   -> Calibration Done ({time.time() - start_t:.1f}s). Params: {best_params}")
+                param_registry[sub_name] = best_params.tolist()
 
-            # 2. Generate Submission
+                # Save immediately to avoid data loss on crash
+                with open(PARAM_FILE, "w") as f:
+                    json.dump(param_registry, f, indent=4)
+
+            # 2. Generate Submission (ONLY Future Data)
             # For SIDM, we generate 6 samples. For others, just 1.
             num_samples = 6 if model_name == 'SIDM' else 1
             submission_rows = []
@@ -206,70 +225,69 @@ if __name__ == "__main__":
             for cf_id, group in test_truth_df.groupby('CF_pair_id'):
                 group = group.sort_values('Time').reset_index(drop=True)
 
-                # Identify Simulation Start (First point > 2.9s)
+                # Identify Simulation Start (Prediction starts at 3.0s, so we need 2.9s state)
                 mask_future = group['Time'] > OBSERVATION_WINDOW
-                start_indices = group.index[mask_future].tolist()
 
-                sim_start_idx = start_indices[0] if start_indices else len(group)
+                # If no future data exists, skip
+                if not mask_future.any():
+                    continue
 
-                # Get History (Ground Truth)
-                history_times = group['Time'].iloc[:sim_start_idx].values
-                history_x = group['follower_dist'].iloc[:sim_start_idx].values
-                history_v = group['follower_speed'].iloc[:sim_start_idx].values
-                history_a = group['follower_acceleration'].iloc[:sim_start_idx].values
+                start_idx_in_group = group.index[mask_future][0]
 
-                # If there is a future to simulate
-                if sim_start_idx < len(group) and sim_start_idx > 0:
-                    # Prepare Input: Include the last history point (t=2.9) to compute first future step (t=3.0)
-                    input_start_idx = sim_start_idx - 1
+                # We need input from t=2.9 (one step before start_idx)
+                input_start_idx = start_idx_in_group - 1
 
-                    leader_v_input = group['leader_speed'].values[input_start_idx:]
-                    leader_x_input = group['leader_dist'].values[input_start_idx:]
-                    leader_a_input = group['leader_acceleration'].values[input_start_idx:]
+                if input_start_idx < 0:
+                    continue  # Should not happen given 2.9s history requirement
 
-                    init_v = history_v[-1]
-                    init_x = history_x[-1]
+                # Prepare Inputs for Simulation
+                leader_v_input = group['leader_speed'].values[input_start_idx:]
+                leader_x_input = group['leader_dist'].values[input_start_idx:]
+                leader_a_input = group['leader_acceleration'].values[input_start_idx:]
 
-                    future_times = group['Time'].iloc[sim_start_idx:].values
-                else:
-                    # Edge case (shouldn't happen with 10s min duration): No future
-                    leader_v_input = []
-                    future_times = []
+                # Initial State (at t=2.9)
+                init_v = group['follower_speed'].values[input_start_idx]
+                init_x = group['follower_dist'].values[input_start_idx]
+
+                # Get the timestamps for the future (3.0s onwards)
+                future_times = group['Time'].values[start_idx_in_group:]
 
                 # Loop for Multiple Samples
                 for sample_id in range(num_samples):
-
                     if len(leader_v_input) > 0:
                         x_s, v_s, a_s = simulate_trajectory(
                             leader_v_input, leader_x_input, leader_a_input,
                             init_v, init_x, 0.1, best_params, model_name
                         )
-                        # Slice off the first element (which is just the initial condition at t=2.9)
+
+                        # IMPORTANT: The simulation returns the full array including t=0 (2.9s).
+                        # We only want predictions starting from t=1 (3.0s).
                         x_future = x_s[1:]
                         v_future = v_s[1:]
                         a_future = a_s[1:]
-                    else:
-                        x_future, v_future, a_future = [], [], []
 
-                    # Combine History + Future
-                    full_x = np.concatenate([history_x, x_future])
-                    full_v = np.concatenate([history_v, v_future])
-                    full_a = np.concatenate([history_a, a_future])
-                    full_times = group['Time'].values
+                        # Ensure lengths match
+                        min_len = min(len(future_times), len(x_future))
 
-
-                    for t, x, v, a in zip(full_times, full_x, full_v, full_a):
-                        submission_rows.append([cf_id, sample_id, t, x, v, a])
+                        for i in range(min_len):
+                            submission_rows.append([
+                                cf_id,
+                                sample_id,
+                                future_times[i],
+                                x_future[i],
+                                v_future[i],
+                                a_future[i]
+                            ])
 
             # Convert to DataFrame
             cols = ['CF_pair_id', 'sample_id', 'Time', 'follower_dist', 'follower_speed', 'follower_acceleration']
             sub_df = pd.DataFrame(submission_rows, columns=cols)
 
+            # Double check filtering just in case
+            sub_df = sub_df[sub_df['Time'] > OBSERVATION_WINDOW]
+
             filename = f"{SUBMISSION_DIR}/{sub_name}.csv"
             sub_df.to_csv(filename, index=False)
             print(f"Saved: {filename} (Rows: {len(sub_df)})")
 
-    # Save Params
-    with open(f"{PARAM_DIR}/baseline_parameters.json", "w") as f:
-        json.dump(param_registry, f, indent=4)
     print("\n✅ All Baselines Generated.")

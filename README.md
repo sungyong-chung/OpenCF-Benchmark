@@ -43,7 +43,8 @@ We use an automated **"Evaluation-as-a-Service"** workflow. You do not need to r
 ### 1. Prepare Your Model
 1.  Download `benchmark_data/test_input.csv`.
 2.  Run your model to generate trajectories for all pairs.
-3.  **Format:** Your output CSV must strictly follow this format:
+3.  **Format:** Your output CSV must strictly follow the format below.
+    * **DO NOT** include the history (0.0s - 2.9s) in your submission file.
 
 | Column | Description |
 | :--- | :--- |
