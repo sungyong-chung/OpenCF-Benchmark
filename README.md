@@ -90,8 +90,8 @@ We evaluate models on three dimensions:
 
 ### 1. Transition Probability Analysis
 We compare the **Geometric Mean Transition Probability** of your generated trajectories against the Ground Truth using a **Mann-Whitney U Test**.
-* **PASS:** p-value > 0.05 (Your model's behavior is statistically indistinguishable from the Ground Truth).
-* **FAIL:** p-value < 0.05.
+* **PASS:** p-value > 0.1 (Your model's behavior is statistically indistinguishable from the Ground Truth).
+* **FAIL:** p-value < 0.1.
 
 ### 2. One-Step Prediction (Short-term)
 Measures accuracy at exactly `t = 3.0s` (the first predicted step). We calculate the average state (spacing, speed, and acceleration) across all submitted samples (K) before computing the error.
