@@ -57,6 +57,25 @@
         }
     },
     {
+        "Model": "test_IDM",
+        "samples_count": 1,
+        "MW Test (p)": 0.1588,
+        "Avg Trans Prob": 0.2713,
+        "RMSE (v)": 0.2075,
+        "RMSE (s)": 0.0208,
+        "RMSE (a)": 2.0805,
+        "Collision Rate (%)": 0.0,
+        "minADE": 1.488,
+        "minFDE": 3.0857,
+        "Date": "2026-02-26",
+        "meta": {
+            "description": "Test submission using simple (deterministic) Intelligent Driver Model (IDM).",
+            "calibration": "Uses baseline IDM_RMSE_v parameters if available, else default IDM parameters.",
+            "assumptions": "No assumptions provided.",
+            "paper_link": ""
+        }
+    },
+    {
         "Model": "IDM_RMSE_v",
         "samples_count": 1,
         "MW Test (p)": 0.1588,
