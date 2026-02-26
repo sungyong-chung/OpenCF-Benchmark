@@ -1,6 +1,9 @@
 # Ignore Mac system files
 .DS_Store
 
+# Local venv used for running scripts
+.venv/
+
 # Ignore Python cache
 __pycache__/
 *.pyc

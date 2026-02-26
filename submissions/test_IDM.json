@@ -1,0 +1,6 @@
+{
+    "description": "Test submission using simple (deterministic) Intelligent Driver Model (IDM).",
+    "calibration": "Uses baseline IDM_RMSE_v parameters if available, else default IDM parameters.",
+    "assumptions": "",
+    "paper_link": ""
+}
