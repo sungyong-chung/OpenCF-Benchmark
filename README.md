@@ -128,9 +128,9 @@ OpenCF-Benchmark/
 If you use this benchmark or dataset please cite the following work.
 
 ```bibtex
-@article{chung2025characterizing,
+@article{chung2025,
   title={Characterizing Lane Changing Behavior in Mixed Traffic},
-  author={Chung, Sungyong and Talebpour, Alireza and Hamdar, Samer H},
+  author={Sungyong Chung and Alireza Talebpour and Samer H Hamdar},
   journal={arXiv preprint arXiv:2512.07219},
   year={2025}
 }
