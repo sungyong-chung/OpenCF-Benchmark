@@ -26,6 +26,10 @@ baselines/submissions/
 benchmark_data/train.csv
 benchmark_data/models/
 
+# Teporally ignore MC-CF Details.
+submissions/MC_CF_Original.json
+submissions/MC_CF_Conservative.json
+
 # Ignore local IDE settings
 .idea/
 .vscode/
