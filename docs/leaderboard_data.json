@@ -12,9 +12,9 @@
         "minFDE": 2.098,
         "Date": "2026-02-09",
         "meta": {
-            "description": "Proposed by Sungyong Chung, Yanlin Zhang, Nachuan Li, Dana Monzer, and Alireza Talebpour, this model introduces a new paradigm of data-driven car-following. It models driving as a Markov process, predicting behavior by randomly sampling accelerations from empirical distributions within discretized state bins.",
-            "calibration": "Calibration-free. It empirically derives state transitions and acceleration distributions directly from the OpenCF Training Set.",
-            "assumptions": "Markovian assumption: Future acceleration depends only on the current state cluster defined by relative speed, spacing, and follower speed.",
+            "description": "Proposed by Sungyong Chung, Yanlin Zhang, Nachuan Li, Dana Monzer, and Alireza Talebpour.",
+            "calibration": "No calibration details provided.",
+            "assumptions": "No assumptions provided.",
             "paper_link": ""
         }
     },
@@ -31,9 +31,9 @@
         "minFDE": 1.9963,
         "Date": "2026-02-09",
         "meta": {
-            "description": "Proposed by Sungyong Chung, Yanlin Zhang, Nachuan Li, Dana Monzer, and Alireza Talebpour, this is a safety-enhanced variant of the MC-CF paradigm. It incorporates Time-To-Collision (TTC) thresholds to bias acceleration sampling towards lower percentiles in critical scenarios, ensuring safer trajectory generation.",
-            "calibration": "Calibration-free. It empirically derives state transitions and acceleration distributions directly from the OpenCF Training Set.",
-            "assumptions": "Markovian dynamics with probabilistic safety constraints: assumes drivers adopt conservative accelerations (bottom 5-30%) when TTC is below critical thresholds (3s/10s).",
+            "description": "Proposed by Sungyong Chung, Yanlin Zhang, Nachuan Li, Dana Monzer, and Alireza Talebpour, this is a safety-enhanced variant of the MC-CF model.",
+            "calibration": "No calibration details provided.",
+            "assumptions": "No assumptions provided.",
             "paper_link": ""
         }
     },
