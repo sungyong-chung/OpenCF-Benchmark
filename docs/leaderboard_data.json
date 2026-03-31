@@ -13,9 +13,9 @@
         "Date": "2026-02-09",
         "meta": {
             "description": "Proposed by Sungyong Chung, Yanlin Zhang, Nachuan Li, Dana Monzer, and Alireza Talebpour.",
-            "calibration": "No calibration details provided.",
-            "assumptions": "No assumptions provided.",
-            "paper_link": ""
+            "calibration": "No calibration needed.",
+            "assumptions": "Assumes driving behavior follows a first-order Markov Chain where states are defined by follower speed, relative speed, and spacing.",
+            "paper_link": "https://arxiv.org/abs/2603.27909"
         }
     },
     {
@@ -32,9 +32,9 @@
         "Date": "2026-02-09",
         "meta": {
             "description": "Proposed by Sungyong Chung, Yanlin Zhang, Nachuan Li, Dana Monzer, and Alireza Talebpour, this is a safety-enhanced variant of the MC-CF model.",
-            "calibration": "No calibration details provided.",
-            "assumptions": "No assumptions provided.",
-            "paper_link": ""
+            "calibration": "No calibration needed.",
+            "assumptions": "Assumes car-following is a Markov process and that safety in simulations is maintained by sampling from lower acceleration percentiles at low Time-to-Collision (TTC).",
+            "paper_link": "https://arxiv.org/abs/2603.27909"
         }
     },
     {
@@ -57,25 +57,6 @@
         }
     },
     {
-        "Model": "test_IDM",
-        "samples_count": 1,
-        "MW Test (p)": 0.1588,
-        "Avg Trans Prob": 0.2713,
-        "RMSE (v)": 0.2075,
-        "RMSE (s)": 0.0208,
-        "RMSE (a)": 2.0805,
-        "Collision Rate (%)": 0.0,
-        "minADE": 1.488,
-        "minFDE": 3.0857,
-        "Date": "2026-02-26",
-        "meta": {
-            "description": "Test submission using simple (deterministic) Intelligent Driver Model (IDM).",
-            "calibration": "Uses baseline IDM_RMSE_v parameters if available, else default IDM parameters.",
-            "assumptions": "No assumptions provided.",
-            "paper_link": ""
-        }
-    },
-    {
         "Model": "IDM_RMSE_v",
         "samples_count": 1,
         "MW Test (p)": 0.1588,
@@ -90,6 +71,25 @@
         "meta": {
             "description": "Intelligent Driver Model (IDM)",
             "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Speed (v). Parameters calibrated: v0 (desired speed), T (time headway), a_max (max accel), b (comfortable decel), s0 (min gap), delta (exponent).",
+            "assumptions": "No assumptions provided.",
+            "paper_link": ""
+        }
+    },
+    {
+        "Model": "test_IDM",
+        "samples_count": 1,
+        "MW Test (p)": 0.1588,
+        "Avg Trans Prob": 0.2713,
+        "RMSE (v)": 0.2075,
+        "RMSE (s)": 0.0208,
+        "RMSE (a)": 2.0805,
+        "Collision Rate (%)": 0.0,
+        "minADE": 1.488,
+        "minFDE": 3.0857,
+        "Date": "2026-02-26",
+        "meta": {
+            "description": "Test submission using simple (deterministic) Intelligent Driver Model (IDM).",
+            "calibration": "Uses baseline IDM_RMSE_v parameters if available, else default IDM parameters.",
             "assumptions": "No assumptions provided.",
             "paper_link": ""
         }
