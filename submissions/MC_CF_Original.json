@@ -1,6 +1,6 @@
 {
     "description": "Proposed by Sungyong Chung, Yanlin Zhang, Nachuan Li, Dana Monzer, and Alireza Talebpour.",
-    "assumptions": "",
-    "calibration": "",
-    "paper_link": ""
+    "assumptions": "Assumes driving behavior follows a first-order Markov Chain where states are defined by follower speed, relative speed, and spacing.",
+    "calibration": "No calibration needed.",
+    "paper_link": "https://arxiv.org/abs/2603.27909"
 }
