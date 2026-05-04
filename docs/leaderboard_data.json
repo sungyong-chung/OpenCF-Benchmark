@@ -361,6 +361,26 @@
         }
     },
     {
+        "Model": "IDM_GP_Matern52",
+        "samples_count": 6,
+        "MW Test (p)": 0.0,
+        "Avg Trans Prob": 0.2218,
+        "RMSE (v)": 0.0283,
+        "RMSE (s)": 0.0179,
+        "RMSE (a)": 0.2939,
+        "Collision Rate (%)": 0.0,
+        "minADE": 0.6908,
+        "minFDE": 1.3986,
+        "Date": "2026-05-04",
+        "meta": {
+            "description": "Intelligent Driver Model with a Mat\u00e9rn-5/2 Gaussian-process noise structure on velocity-prediction residuals (IDM+GP). Adapted from the published Bayesian framework \u2014 Chengyuan Zhang, Lijun Sun, 'Bayesian Calibration of the Intelligent Driver Model' (arXiv 2210.03571).",
+            "calibration": "Two-stage calibration on OpenCF train.csv (Waymo, dt=0.1, urban: q99 follower_speed = 19.6 m/s). Stage 1 (IDM): differential-evolution closed-loop velocity-RMSE fit over 30-step (3.0 s) rollouts on 4,000 random pairs, urban-typical bounds (v0 in [15,30], T in [0.6,2.5], a in [0.5,3], b in [0.5,3], s0 in [1,4]). Result: v0=28.46, T=0.99, a=1.31, b=0.54, s0=3.29 (delta=4 fixed). Stage 2 (Mat\u00e9rn-5/2 hyperparameters): marginal-likelihood (ML-II) fit on IDM residuals from 2,000 pairs split into 3,002 fixed-length chunks. Result: ell=0.817, sigma_f=0.0779, sigma_n=0.0171. PyMC NUTS pooled joint inference (800 pairs, 1,500 chunks, 2 chains x (500 tune + 500 draws), prior-scale=0.3 anchored at the DE point) was also explored but the joint one-step-prediction likelihood pulls IDM into a regime where the flexible GP residual absorbs short-term dynamics, hurting the closed-loop trajectory metric \u2014 the DE-anchored two-stage fit was retained for the final submission. At inference, 6 trajectories per pair are simulated using the calibrated IDM with independent draws from the GP conditional posterior on each pair's last 28 history residuals.",
+            "assumptions": "Pooled population IDM parameters. Acceleration clipped to [-10, 5] m/s^2. Residual eps_t (m/s) follows a zero-mean GP with Mat\u00e9rn-5/2 kernel K(t,t') = sigma_f^2 * (1 + sqrt(5)|tau|/ell + 5 tau^2/(3 ell^2)) * exp(-sqrt(5)|tau|/ell), plus diagonal noise sigma_n^2 * I. At test time, future residuals are drawn from the GP conditional posterior given up to 28 most recent observed history residuals.",
+            "paper_link": "https://arxiv.org/abs/2210.03571",
+            "code_link": "https://github.com/Chengyuan-Zhang/IDM_Bayesian_Calibration"
+        }
+    },
+    {
         "Model": "VAN_AREM_RMSE_s",
         "samples_count": 1,
         "MW Test (p)": 0.0002,
@@ -396,6 +416,26 @@
             "calibration": "Calibrated using Differential Evolution (scipy.optimize) on the OpenCF Training Set. Objective: Minimize RMSE of Spacing (s). Parameters calibrated: v0, T, a_max, b, s0, delta, sigma (noise std dev).",
             "assumptions": "No assumptions provided.",
             "paper_link": ""
+        }
+    },
+    {
+        "Model": "IDM_AR5",
+        "samples_count": 6,
+        "MW Test (p)": 0.0,
+        "Avg Trans Prob": 0.2007,
+        "RMSE (v)": 0.027,
+        "RMSE (s)": 0.0178,
+        "RMSE (a)": 0.2958,
+        "Collision Rate (%)": 0.0,
+        "minADE": 0.6334,
+        "minFDE": 1.2113,
+        "Date": "2026-05-04",
+        "meta": {
+            "description": "Intelligent Driver Model with AR(5) noise on velocity-prediction residuals (IDM+AR). Adapted from the published Bayesian dynamic-regression framework \u2014 Chengyuan Zhang, Wenshuo Wang, Lijun Sun, 'Calibrating Car-following Models via Bayesian Dynamic Regression' (arXiv 2307.03340).",
+            "calibration": "Two-stage calibration on OpenCF train.csv (Waymo, dt=0.1, urban: q99 follower_speed = 19.6 m/s). Stage 1 (IDM): differential-evolution closed-loop velocity-RMSE fit over 30-step (3.0 s) rollouts on 4,000 random pairs, urban-typical bounds. Result: v0=28.46, T=0.99, a=1.31, b=0.54, s0=3.29 (delta=4 fixed). Stage 2 (AR(5) coefficients): Yule-Walker estimate on IDM residuals from 2,000 pairs (177,988 transitions). Result: rho = [1.022, -0.145, 0.167, -0.038, -0.057] (stationarity-checked: max reciprocal-root modulus < 0.95), sigma_eta = 0.0344 m/s. PyMC NUTS pooled joint inference (800 pairs, prior-scale=0.3 anchored at the DE point) was also explored but the one-step-prediction likelihood pulls IDM away from the closed-loop optimum \u2014 the DE-anchored two-stage fit was retained. At inference, 6 trajectories per pair are simulated with the calibrated IDM, the AR(5) chain is warm-started from each pair's last 5 observed residuals (computed against the calibrated IDM), and innovations eta_t are drawn independently per sample.",
+            "assumptions": "Pooled population IDM parameters. Acceleration clipped to [-10, 5] m/s^2. Forward velocity: v_{t+1} = max(v_t + a_IDM(v_t, dv_t, s_t)*dt + eps_t, 0). AR(5) innovation: eps_t = sum_{k=1..5} rho_k * eps_{t-k} + eta_t, eta_t ~ N(0, sigma_eta^2). At test time the AR chain is warm-started from the 5 most recent observed residuals computed on the 2.9 s of history.",
+            "paper_link": "https://arxiv.org/abs/2307.03340",
+            "code_link": "https://github.com/Chengyuan-Zhang/IDM_Bayesian_Calibration"
         }
     }
 ]
