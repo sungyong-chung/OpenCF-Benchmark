@@ -19,6 +19,25 @@
         }
     },
     {
+        "Model": "IDM_MCS_TX",
+        "samples_count": 6,
+        "MW Test (p)": 0.5298,
+        "Avg Trans Prob": 0.2568,
+        "RMSE (v)": 0.2915,
+        "RMSE (s)": 0.0229,
+        "RMSE (a)": 2.9127,
+        "Collision Rate (%)": 0.0,
+        "minADE": 0.8225,
+        "minFDE": 1.9646,
+        "Date": "2026-05-08",
+        "meta": {
+            "description": "IDM_MCS_TX: a deep, history-conditioned variant of IDM_MCS. The candidate enumeration over chain-valid next-foll_v bins is the same as IDM_MCS, but instead of scoring each candidate by chain probability alone, a 1.88M-parameter decoder-only Trajectory Transformer (4 layers, 6 heads, d=192) \u2014 trained from scratch on OpenCF train.csv to predict the next foll_v bin given a 64-step token sequence (rel_v, spacing, foll_v, leader_v_next at each step) \u2014 re-ranks the chain-valid candidates with its full-history context. Logits are combined as combined_logit[bin] = log(chain_p) + 0.5 * transformer_logit, with a 1e-4 escape floor for off-chain bins. Sample 0 emits the probability-weighted continuous mean over allowed bins (Bayes-optimal point estimate, smooth acceleration); samples 1-5 use temperature-T (T=2.0) softmax sampling with within-bin IDM clamping for kinematic smoothness. Hard 1.0 m spacing guard with 5 m/s^2 maximum braking eliminates collisions.",
+            "calibration": "Two stages. (1) Trajectory Transformer: 1.88M params, trained 15,000 AdamW steps (batch 128, cosine-decay LR 3e-4) on cross-entropy of next foll_v bin from random 64-step crops of OpenCF train.csv. Final training cross-entropy 0.20 nats over 41 bins. (2) Sampler hyperparameters: beta=0.5, tau=2.0, escape_floor=1e-4, safety_margin=1.0 m, accel_window=[-8, +4] m/s^2 \u2014 found by an offline 10-config grid search to bring offline-computed Avg Trans Prob within 4e-4 of the GT reference 0.2572 while maintaining a 0% collision rate. Underlying IDM uses the published DE closed-loop fit (v0=28.46, T=0.99, a=1.31, b=0.54, s0=3.29, delta=4) as the in-bin clamp target.",
+            "assumptions": "First-order Markov state for chain candidate enumeration; full history conditioning via the Transformer. IDM with delta=4 (canonical) for kinematic prior. Trapezoidal kinematic integration. Independent rng per (pair, sample) seed for reproducibility.",
+            "paper_link": ""
+        }
+    },
+    {
         "Model": "IDM_MCS",
         "samples_count": 6,
         "MW Test (p)": 0.6713,
