@@ -128,16 +128,12 @@ OpenCF-Benchmark/
 If you use this benchmark or dataset please cite the following work.
 
 ```bibtex
-@article{chung2026data,
-  title={Data is All You Need: Markov Chain Car-Following (MC-CF) Model},
-  author={Chung, Sungyong and Zhang, Yanlin and Li, Nachuan and Monzer, Dana and Talebpour, Alireza},
-  journal={arXiv preprint arXiv:2603.27909},
-  year={2026}
-}
-@article{chung2025characterizing,
+@article{chung2026characterizing,
   title={Characterizing Lane-Changing Behavior in Mixed Traffic},
   author={Chung, Sungyong and Talebpour, Alireza and Hamdar, Samer H},
-  journal={arXiv preprint arXiv:2512.07219},
-  year={2025}
+  journal={Transportation Research Part C: Emerging Technologies},
+  pages={106039},
+  year={2026},
+  publisher={Elsevier}
 }
 ```
